@@ -66,7 +66,9 @@ function loadPapers(onData) {
   cats.then(() => fetch("data/publications.json")).then(r => r.json()).then(d => { if (!got) onData(d); }).catch(() => {});
   cats.then(fetchLive).then(d => { got = true; onData(d); }).catch(() => {});
 }
-const loadPeople = () => fetch("data/people.json").then(r => r.json()).then(d => d.people).catch(() => []);
+// visitors and alumni have pages but no seat (or cartoon) on the planet
+const onPlanet = p => p.role !== "Visitors" && p.role !== "Alumni";
+const loadPeople = () => fetch("data/people.json").then(r => r.json()).then(d => d.people.filter(onPlanet)).catch(() => []);
 
 /* ---------- tiny 3D kit for canvas drawings ---------- */
 function project(x, y, z, c) {
@@ -102,7 +104,8 @@ function hidpi(cv, ctx) {
 /* ---------- shared top-bar menus (<details>) close when you pick or click away ---------- */
 function wireMenus(people) {
   const list = document.getElementById("peopleMenu");
-  if (list && people) list.innerHTML = people.map(p => `<a href="people.html#${p.slug}"><img src="assets/avatars/${p.slug}.png" alt="">${esc(p.name)}</a>`).join("");
+  if (list && people) list.innerHTML = people.filter(onPlanet).map(p => `<a href="people.html#${p.slug}"><img src="assets/avatars/${p.slug}.png" alt="">${esc(p.name)}</a>`).join("")
+    + `<a href="people.html#visitors">Visitors and alumni →</a>`;
   document.addEventListener("click", e => document.querySelectorAll("details.menu[open]").forEach(d => { if (!d.contains(e.target) || e.target.closest("a")) d.open = false; }));
 }
 // The preview host serves the home page at the root, not as play.html.

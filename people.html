@@ -70,6 +70,7 @@ h1, h2, h3 { font-family: var(--display); margin: 0; font-weight: 600; text-wrap
 .all { padding-block: 34px 50px; }
 .all h1 { font-size: clamp(2.4rem, 6vw, 3.4rem); }
 .all p { color: var(--muted); margin: 6px 0 24px; }
+.all h2.sub { font-size: clamp(1.8rem, 4.5vw, 2.4rem); margin-top: 48px; scroll-margin-top: 80px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 24px 18px; }
 .grid a { text-decoration: none; transition: transform .45s var(--bounce); display: block; }
 .grid a:hover { transform: rotate(0deg) translateY(-6px) scale(1.04) !important; }
@@ -95,7 +96,7 @@ footer { color: var(--muted); font-size: .82rem; padding-block: 20px 40px; borde
 </div>
 <script src="js/common.js"></script>
 <script>
-const ROLE = { "Principal investigator": "Principal investigator", "Postdoctoral fellows": "Postdoctoral fellow", "PhD students": "PhD student", "Master's students": "Master’s student" };
+const ROLE = { "Principal investigator": "Principal investigator", "Postdoctoral fellows": "Postdoctoral fellow", "PhD students": "PhD student", "Master's students": "Master’s student", "Visitors": "Visiting researcher", "Alumni": "Alumni" };
 const norm = s => s.toLowerCase().replace(/[^a-z]/g, "");
 let PEOPLE = [], PUBS = [];
 
@@ -130,14 +131,19 @@ function profile(i) {
   if (p.slug === "ziyun-wang") window.mountAvatar?.();
   scrollTo({ top: 0 });
 }
-function everyone() {
+function everyone(at) {
   document.title = "People of T-Cat’s Journey";
+  const tile = (p, i) => `<a href="#${p.slug}" style="transform:rotate(${(((i * 37) % 7) - 3) * .7}deg)"><figure class="polaroid" style="margin:0"><img loading="lazy" src="assets/team/${p.slug}.jpg" alt=""><figcaption>${esc(p.name)}</figcaption><span class="rl">${esc(ROLE[p.role] || p.role)}</span></figure></a>`;
+  const part = (id, title, note, ps) => ps.length ? `<h2 class="sub" id="${id}">${title}</h2><p>${note}</p><div class="grid">${ps.map(tile).join("")}</div>` : "";
   $("#view").innerHTML = `<section class="all"><div class="cap">The people on the journey</div><h1>Everyone on the planet</h1><p>Pick someone to visit their page.</p>
-    <div class="grid">${PEOPLE.map((p, i) => `<a href="#${p.slug}" style="transform:rotate(${(((i * 37) % 7) - 3) * .7}deg)"><figure class="polaroid" style="margin:0"><img loading="lazy" src="assets/team/${p.slug}.jpg" alt=""><figcaption>${esc(p.name)}</figcaption><span class="rl">${esc(ROLE[p.role] || p.role)}</span></figure></a>`).join("")}</div></section>`;
+    <div class="grid">${PEOPLE.filter(onPlanet).map(tile).join("")}</div>
+    ${part("visitors", "Visitors", "Researchers spending time with the group now.", PEOPLE.filter(p => p.role === "Visitors"))}
+    ${part("alumni", "Alumni", "Former members and visitors, and where the journey took them.", PEOPLE.filter(p => p.role === "Alumni"))}</section>`;
+  if (at) document.getElementById(at)?.scrollIntoView(); else scrollTo({ top: 0 });
 }
 function route() {
-  const i = PEOPLE.findIndex(p => p.slug === location.hash.slice(1));
-  i >= 0 ? profile(i) : everyone();
+  const h = location.hash.slice(1), i = PEOPLE.findIndex(p => p.slug === h);
+  i >= 0 ? profile(i) : everyone(["visitors", "alumni"].includes(h) ? h : "");
 }
 addEventListener("hashchange", route);
 Promise.all([
