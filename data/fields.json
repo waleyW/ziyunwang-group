@@ -143,7 +143,7 @@
     "id": "neb3d",
     "label": "Minimum energy path",
     "ctl": "neb",
-    "caption": "A nudged-elastic-band (NEB) calculation running live in your browser. A chain of images slides downhill on a model energy surface (Müller–Brown, with minima A, B and C) until it traces the minimum-energy path; the climbing image then settles on the saddle point, the transition state, whose height above the start is the barrier. Pick other end points, change the number of images or the spring, and drag to turn the surface. We run the same method with DFT on real catalyst surfaces."
+    "caption": "A nudged-elastic-band (NEB) calculation running live in your browser. A chain of images slides downhill on a model energy surface (Müller–Brown, with minima A, B and C) until it traces the minimum-energy path; the climbing image then settles on the saddle point, the transition state, whose height above the start is the barrier. Pick other end points, change the number of images or the spring, and drag to turn the surface. We run the same method with DFT on real catalyst surfaces. On the right, a free-energy diagram for CO₂ reduction (illustrative values on copper): slide the electrode potential and each electron-transfer step drops by eU; a red step is still uphill, and the potential that makes every step downhill is the limiting potential."
    },
    {
     "id": "compute",

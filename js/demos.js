@@ -344,8 +344,9 @@ const DEMOS = {
     for (let j = 0; j <= G; j++) { const row = []; for (let i = 0; i <= G; i++) { const x = dom.x0 + i / G * (dom.x1 - dom.x0), y = dom.y0 + j / G * (dom.y1 - dom.y0), v = V(x, y); row.push({ x, y, v, p: W(x, y, v) }); } grid.push(row); }
     const col = v => { const k = clamp((v + 150) / 190, 0, 1); return [40 + k * 208, 90 + k * 152, 160 + k * 66]; };
     const bead = ball("#fbf6e9"), ends = ball("#c8564b"), ts = ball("#f3c64e");
+    let U = 0;                                                  // electrode potential vs RHE for the CO2RR diagram
     return {
-      cam, act: base.act,
+      cam, act: a => a.startsWith("U:") ? (U = +a.slice(2)) : base.act(a),
       draw(ctx, w, h, t) {
         const narrow = w < 640;
         if (!REDUCE && t - cam.touched > 3000) cam.yaw += .0015;
@@ -374,15 +375,10 @@ const DEMOS = {
         ctx.strokeStyle = "#fbf6e9"; ctx.lineWidth = 2.5; ctx.beginPath(); pts.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.stroke();
         const st = base.state();
         pts.forEach((p, i) => { const s = i === 0 || i === P.length - 1 ? ends : i === top && (st.climbing || st.conv) ? ts : bead, r = (i === top ? 8 : 6) * p.f; ctx.drawImage(s, p.x - r, p.y - r, r * 2, r * 2); });
-        // energy along the path
-        const pl = narrow ? 34 : w * .72, pr = w - 18, pt = narrow ? h * .72 : h * .2, pb = narrow ? h - 30 : h * .78, s = [0];
-        for (let i = 1; i < P.length; i++) s.push(s[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
-        const emax = Math.max(0, ...E), SX = v => pl + v / s[s.length - 1] * (pr - pl), SY = v => pb - (v + 150) / (emax + 150) * (pb - pt);
-        ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(pl, pt); ctx.lineTo(pl, pb); ctx.lineTo(pr, pb); ctx.stroke();
-        ctx.strokeStyle = "#1b4c82"; ctx.lineWidth = 2; ctx.beginPath(); E.forEach((e, i) => i ? ctx.lineTo(SX(s[i]), SY(e)) : ctx.moveTo(SX(s[i]), SY(e))); ctx.stroke();
-        E.forEach((e, i) => { ctx.fillStyle = i === top ? "#f3c64e" : "#1b4c82"; ctx.beginPath(); ctx.arc(SX(s[i]), SY(e), i === top ? 5 : 3, 0, 7); ctx.fill(); });
-        ctx.fillStyle = INK; ctx.font = "italic 600 15px Cormorant Garamond, serif"; ctx.textAlign = "left"; ctx.fillText("energy along the path", pl, pt - 10);
-        ctx.font = "12px JetBrains Mono, monospace"; ctx.fillText(`barrier ${(E[top] - E[0]).toFixed(1)} · ${st.conv ? "converged" : st.running ? "iteration " + st.it : "press Run NEB"}`, pl, pb + 18);
+        // NEB readout, one line under the surface
+        ctx.fillStyle = INK; ctx.font = "12px JetBrains Mono, monospace"; ctx.textAlign = "left";
+        ctx.fillText(`barrier ${(E[top] - E[0]).toFixed(1)} · ${st.conv ? "converged" : st.running ? "iteration " + st.it : "press Run NEB"}`, narrow ? 16 : 24, narrow ? 18 : h - 16);
+        co2rrDiagram(ctx, narrow ? 40 : w * .66, narrow ? w - 16 : w - 18, narrow ? h * .7 : h * .18, narrow ? h - 34 : h * .8, U);
       }
     };
   },
@@ -428,12 +424,54 @@ const DEMOS = {
   },
 };
 
+/* CO2 reduction free-energy diagram, computational hydrogen electrode: a state with n (H+ + e-) transferred moves by n·eU.
+   Illustrative values on a Cu surface (eV at U = 0 V vs RHE). */
+const CO2RR = [
+  { k: "CO₂", g: 0, n: 0, x: 0 },
+  { k: "*COOH", g: .41, n: 1, x: 1, from: 0 },
+  { k: "*CO", g: .05, n: 2, x: 2, from: 1 },
+  { k: "CO(g)", g: .20, n: 2, x: 3, from: 2, c: "#3f8fa0" },
+  { k: "*CHO", g: .79, n: 3, x: 3, from: 2, c: "#D9773F" },
+];
+function co2rrDiagram(ctx, pl, pr, pt, pb, U) {
+  const G = s => s.g + s.n * U, lo = -2.4, hi = 1.0, Y = g => pb - (g - lo) / (hi - lo) * (pb - pt);
+  const slot = (pr - pl - 52) / 4, bw = slot * .62, X = x => pl + 8 + x * slot;
+  ctx.strokeStyle = INK; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(pl, pt); ctx.lineTo(pl, pb); ctx.lineTo(pr, pb); ctx.stroke();
+  ctx.setLineDash([2, 4]); ctx.strokeStyle = "rgba(43,53,80,.3)"; ctx.beginPath(); ctx.moveTo(pl, Y(0)); ctx.lineTo(pr, Y(0)); ctx.stroke(); ctx.setLineDash([]);
+  // connectors; an uphill electron-transfer step is the one holding the reaction back
+  for (const s of CO2RR) if (s.from != null) {
+    const p = CO2RR[s.from], up = s.n > p.n && G(s) - G(p) > .005;
+    ctx.strokeStyle = up ? "#c8564b" : "rgba(43,53,80,.45)"; ctx.lineWidth = up ? 2 : 1.2; ctx.setLineDash(up ? [] : [4, 3]);
+    ctx.beginPath(); ctx.moveTo(X(p.x) + bw, Y(G(p))); ctx.lineTo(X(s.x), Y(G(s))); ctx.stroke(); ctx.setLineDash([]);
+  }
+  ctx.font = "12px JetBrains Mono, monospace";
+  const side = CO2RR.filter(s => s.x === 3).map(s => ({ s, y: Y(G(s)) })).sort((a, b) => a.y - b.y);
+  if (side[1].y - side[0].y < 15) { const m = (side[0].y + side[1].y) / 2; side[0].y = m - 7.5; side[1].y = m + 7.5; }
+  for (const s of CO2RR) {
+    const y = Y(G(s)); ctx.strokeStyle = s.c || "#1b4c82"; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(X(s.x), y); ctx.lineTo(X(s.x) + bw, y); ctx.stroke();
+    ctx.fillStyle = s.c || INK;
+    if (s.x < 3) { ctx.textAlign = "center"; ctx.fillText(s.k, X(s.x) + bw / 2, y - 7); }
+    else { ctx.textAlign = "left"; ctx.fillText(s.k, X(s.x) + bw + 6, side.find(q => q.s === s).y + 4); }
+  }
+  // limiting potential of each product = the largest electron-transfer step at 0 V
+  const lim = end => { let m = 0, s = end; while (s.from != null) { const p = CO2RR[s.from]; if (s.n > p.n) m = Math.max(m, s.g - p.g); s = p; } return -m; };
+  const uCO = lim(CO2RR[3]), uCHO = lim(CO2RR[4]);
+  ctx.fillStyle = INK; ctx.textAlign = "left"; ctx.font = "italic 600 15px Cormorant Garamond, serif";
+  ctx.fillText("CO₂ reduction: free energy at", pl, pt - 26);
+  ctx.font = "12px JetBrains Mono, monospace"; ctx.fillText(`U = ${U.toFixed(2)} V vs RHE`, pl, pt - 9);
+  ctx.save(); ctx.translate(pl - 10, pt + 4); ctx.rotate(-Math.PI / 2); ctx.textAlign = "right"; ctx.fillText("ΔG (eV)", 0, 0); ctx.restore();
+  const ok = u => U <= u + 1e-9 ? "✓" : "";
+  ctx.fillStyle = "#3f8fa0"; ctx.fillText(`CO needs ${uCO.toFixed(2)} V ${ok(uCO)}`, pl, pb + 17);
+  ctx.fillStyle = "#D9773F"; ctx.fillText(`*CHO needs ${uCHO.toFixed(2)} V ${ok(uCHO)}`, pl, pb + 32);
+}
+
 function mountDemo(root) {
   const cv = root.querySelector("canvas"), ctx = cv.getContext("2d"), demo = DEMOS[root.dataset.demo](root);
   let mouse = { x: -1, y: -1 }, visible = false, dragging = false, running = false;
   if (demo.cam) dragRotate(cv, demo.cam); else cv.style.cursor = demo.down ? "grab" : "pointer";
   cv.style.touchAction = demo.down ? "none" : "pan-y";
   const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  if (demo.act) { const act = demo.act; demo.act = a => { act(a); kick(); }; }   // any control redraws, even with reduced motion
   root.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => { demo.act?.(b.dataset.act); kick(); }));
   cv.addEventListener("pointerdown", e => { if (demo.down && demo.down(...pos(e))) { dragging = true; cv.setPointerCapture?.(e.pointerId); kick(); } });
   cv.addEventListener("pointermove", e => { const [x, y] = pos(e); mouse = { x, y }; if (dragging) demo.move(x, y); kick(); });
