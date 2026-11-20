@@ -118,7 +118,7 @@ function profile(i) {
         ${p.focus ? `<p class="focus">${esc(p.focus)}</p>` : `<p class="focus">Theoretical Catalysis Group</p>`}
         ${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : `<p class="bio empty">A longer introduction is on its way.</p>`}
         ${p.email ? `<div class="contact"><span class="addr" id="addr">${esc(p.email)}</span><button class="sbtn" id="copy" type="button">Copy email</button></div>` : ""}
-        ${p.links?.length ? `<div class="links">${p.links.map(l => `<a class="sbtn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>` : ""}
+        ${p.links?.length ? `<div class="links">${p.links.map(l => l.url.startsWith("mailto:") ? `<a class="sbtn" href="${esc(l.url)}">${esc(l.label)}</a>` : `<a class="sbtn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>` : ""}
         ${papers.length ? `<section class="papers"><h2>Recent papers with the group</h2><ol>${papers.map(x => `<li><a href="https://doi.org/${esc(x.doi)}" target="_blank" rel="noopener">${esc(x.t)}</a><div class="j">${esc(x.j)}, ${x.y}</div></li>`).join("")}</ol></section>` : ""}
         ${p.source ? `<p class="source">Introduction adapted from the <a href="${esc(p.source)}" target="_blank" rel="noopener">group website</a>.</p>` : ""}
       </div>
