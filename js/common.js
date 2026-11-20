@@ -10,7 +10,7 @@ const SHORT_J = { "Journal of the American Chemical Society": "J. Am. Chem. Soc.
 const TOPICS = [
   { key: "ml", name: "Machine learning", color: "#D9773F", blurb: "Graph neural networks, generative models and language-model agents that learn chemistry from data." },
   { key: "dft", name: "DFT computation", color: "#3E8EE8", blurb: "First-principles calculations of surfaces, reaction paths and transition states." },
-  { key: "exp", name: "Experiment", color: "#2FA57E", blurb: "Our own electrochemistry and plasma experiments. The first paper is on its way." }
+  { key: "exp", name: "Experiment", color: "#2FA57E", blurb: "Our own electrochemistry and plasma experiments." }
 ];
 // Secondary tag only: the reaction a paper studies.
 const REACTIONS = [

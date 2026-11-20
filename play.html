@@ -308,7 +308,7 @@ const Galaxy = (() => {
 })();
 (function galaxyUI() {
   const lg = $("#legend");
-  lg.innerHTML = TOPICS.map((t, i) => `<button data-t="${i}" aria-pressed="false"><span class="sw" style="background:${t.color}"></span>${esc(t.name)}${t.key === "exp" ? " · first paper coming soon" : ""}</button>`).join("");
+  lg.innerHTML = TOPICS.map((t, i) => `<button data-t="${i}" aria-pressed="false"><span class="sw" style="background:${t.color}"></span>${esc(t.name)}</button>`).join("");
   lg.querySelectorAll("button[data-t]").forEach(b => b.addEventListener("click", () => {
     const on = b.getAttribute("aria-pressed") !== "true";
     lg.querySelectorAll("button[data-t]").forEach(x => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", on); lg.classList.toggle("dim", on);

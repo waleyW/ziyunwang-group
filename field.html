@@ -52,6 +52,7 @@
 .limits p { margin: 4px 0 0; color: var(--muted); }
 .papers-h { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: baseline; justify-content: space-between; }
 .papers-h h2 { font-size: 1.9rem; }
+.papers-h[hidden] { display: none; }
 #q { flex: 1 1 220px; min-width: 0; max-width: 420px; font: inherit; color: var(--ink); background: var(--paper2); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; }
 .pubs { list-style: none; margin: 10px 0 0; padding: 0; }
 .pub { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 4px 16px; padding: 14px 6px; border-top: 1px solid var(--line); }
@@ -66,7 +67,6 @@
 .cites { font: .74rem var(--mono); color: var(--muted); white-space: nowrap; padding-top: 3px; }
 @media (max-width: 620px) { .pub { grid-template-columns: minmax(0, 1fr); } }
 .more { display: flex; gap: 14px; align-items: center; margin: 16px 0 40px; }
-.empty-exp { padding: 20px 0; font: italic 500 1.3rem/1.4 var(--display); color: var(--muted); list-style: none; }
 .others { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding-block: 20px 50px; border-top: 1px solid var(--line); }
 .others a { text-decoration: none; display: grid; justify-items: center; gap: 2px; text-align: center; transition: transform .45s var(--bounce); }
 .others a:hover { transform: translateY(-6px); }
@@ -180,7 +180,10 @@ function renderList() {
   let ps = key === "all" ? PAPERS : PAPERS.filter(p => topicOf(p) === idx);
   if (query) { const q = query.toLowerCase(); ps = ps.filter(p => (p.t + " " + p.j + " " + p.a.join(" ")).toLowerCase().includes(q)); }
   $("#count").textContent = PAPERS.length ? `${fmt(ps.length)} papers` : "";
-  if (key === "exp" && !ps.length && !query) { $("#list").innerHTML = `<li class="empty-exp">Our first experimental paper as first authors is on its way. It will appear here as soon as it is out.</li>`; $("#moreBtn").hidden = true; return; }
+  // no first-author experimental paper yet: leave the paper list out instead of a placeholder
+  const none = key === "exp" && !ps.length && !query;
+  $(".papers-h").hidden = $("#list").hidden = none;
+  if (none) { $("#moreBtn").hidden = true; return; }
   $("#list").innerHTML = ps.slice(0, shown).map(row).join("") || `<li class="pub"><div></div><div>No papers match. Clear the search.</div></li>`;
   $("#moreBtn").hidden = ps.length <= shown;
 }
