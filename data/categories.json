@@ -1,0 +1,6 @@
+{
+ "_help": "Fix a paper's field by DOI (lower case). Keys: ml (machine learning), dft (DFT computation), exp (experiment). Unlisted papers: machine learning if the title says so, otherwise DFT.",
+ "overrides": {
+  "10.1039/d5lf00128e": "dft"
+ }
+}

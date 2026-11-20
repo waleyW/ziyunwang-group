@@ -1,0 +1,149 @@
+{
+ "_help": "Avatars on the planet. look: male | female | neutral (set by the group, never guessed). url: personal homepage opened on click.",
+ "people": [
+  {
+   "name": "Ziyun Wang",
+   "role": "Principal investigator",
+   "look": "male",
+   "hair": "#1d1d22",
+   "glasses": true,
+   "top": "#3c4250",
+   "url": "people.html#ziyun-wang"
+  },
+  {
+   "name": "Yu Mao",
+   "role": "Postdoctoral fellows",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#e8a87c",
+   "url": "people.html#yu-mao"
+  },
+  {
+   "name": "Wensheng Fang",
+   "role": "Postdoctoral fellows",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#85b8cb",
+   "url": "people.html#wensheng-fang"
+  },
+  {
+   "name": "Yingxin Li",
+   "role": "PhD students",
+   "look": "female",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#c3aed6",
+   "url": "people.html#yingxin-li"
+  },
+  {
+   "name": "Ruihu Lu",
+   "role": "PhD students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#a8d5a2",
+   "url": "people.html#ruihu-lu"
+  },
+  {
+   "name": "Xiu Wang",
+   "role": "PhD students",
+   "look": "female",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#f2c76e",
+   "url": "people.html#xiu-wang"
+  },
+  {
+   "name": "Chengyi Zhang",
+   "role": "PhD students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#e88f9a",
+   "url": "people.html#chengyi-zhang"
+  },
+  {
+   "name": "Xingyu Wang",
+   "role": "PhD students",
+   "look": "female",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#9fc5e8",
+   "url": "people.html#xingyu-wang"
+  },
+  {
+   "name": "Mengyao Chang",
+   "role": "PhD students",
+   "look": "female",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#d9b38c",
+   "url": "people.html#mengyao-chang"
+  },
+  {
+   "name": "Mengjiao Li",
+   "role": "PhD students",
+   "look": "female",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#b5c99a",
+   "url": "people.html#mengjiao-li"
+  },
+  {
+   "name": "Xingbao Chen",
+   "role": "PhD students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#f4a6a6",
+   "url": "people.html#xingbao-chen"
+  },
+  {
+   "name": "Shijia Li",
+   "role": "PhD students",
+   "look": "female",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#8fb3d9",
+   "url": "people.html#shijia-li"
+  },
+  {
+   "name": "Zhanghao Ren",
+   "role": "PhD students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#e6c2a1",
+   "url": "people.html#zhanghao-ren"
+  },
+  {
+   "name": "Botong Chu",
+   "role": "PhD students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#a7c4bc",
+   "url": "people.html#botong-chu"
+  },
+  {
+   "name": "Liwei Zhang",
+   "role": "PhD students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#d7a9e3",
+   "url": "people.html#liwei-zhang"
+  },
+  {
+   "name": "Zhekang Zhao",
+   "role": "Master's students",
+   "look": "male",
+   "hair": "#24211f",
+   "glasses": false,
+   "top": "#c9d97a",
+   "url": "people.html#zhekang-zhao"
+  }
+ ]
+}

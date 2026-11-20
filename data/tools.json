@@ -1,0 +1,22 @@
+{
+  "tools": [
+    {
+      "name": "CatPath-GPT",
+      "what": "A mixture-of-experts language-model system that plans and runs computational catalyst design.",
+      "paper": "10.1002/smm2.70080",
+      "url": ""
+    },
+    {
+      "name": "ChEdu",
+      "what": "A guided AI teaching assistant for chemistry courses and exam practice.",
+      "paper": "10.1021/acs.jchemed.5c00036",
+      "url": ""
+    },
+    {
+      "name": "HEA Pareto explorer",
+      "what": "Search the activity and stability trade-off across high-entropy-alloy catalysts.",
+      "paper": "10.1039/d5sc06100h",
+      "url": ""
+    }
+  ]
+}

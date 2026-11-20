@@ -1,0 +1,227 @@
+{
+ "_help": "Text for the three field pages, written in the style of the Open Catalyst Project pages: the problem, what we built, how it works, and its limits. Cards link to our papers by DOI. Add concrete numbers (accuracy, dataset size, speed-up) to 'numbers' when the group is happy to quote them.",
+ "ml": {
+  "tagline": "Teaching machines the chemistry of surfaces",
+  "demos": [
+   {
+    "id": "active",
+    "label": "Try active learning",
+    "ctl": "active",
+    "caption": "Your turn to find the best catalyst. A hidden curve gives the activity of every alloy composition, and each point you reveal costs one calculation. Tap the plot to run one yourself, or let the AI choose: it fits a Gaussian process to what it has seen (orange line, with its uncertainty as the shaded band) and runs next where the expected improvement is highest. This is the strategy behind our active-learning search that found Cu–Al for CO₂ reduction. The model is computed live in your browser; the hidden curve is a stand-in for DFT."
+   },
+   {
+    "id": "relax",
+    "label": "Adsorption search",
+    "ctl": "new",
+    "caption": "An adsorption search like the ones our models run. Eight starting placements of CO on a Cu(111) surface are relaxed with forces predicted by a graph neural network, and the lowest-energy site is kept. A DFT relaxation takes hours; a trained network takes a tiny fraction of that, so thousands of surfaces can be searched. Schematic: positions and energies are illustrative."
+   },
+   {
+    "id": "learn",
+    "label": "Message passing",
+    "ctl": "learn",
+    "caption": "How a graph neural network reads a catalyst: each atom gathers information from its neighbours, one shell per layer, before the network predicts an energy. Tap any atom to start there."
+   }
+  ],
+  "overview": [
+   "Finding a better catalyst means knowing how molecules bind to thousands of possible surfaces. Density functional theory (DFT) answers that one surface at a time, and each calculation takes hours to days, so whole families of materials stay unexplored.",
+   "We train machine-learning models on DFT data so they can stand in for the calculation: graph neural networks that read a catalyst as a graph of atoms and predict energies almost instantly, active learning that decides which DFT calculation to run next, and generative and multi-objective search that proposes new candidates instead of only ranking known ones.",
+   "Predictions go back to the lab. Candidates our models rank highly are made and tested with our collaborators, and the new results feed the next round of training."
+  ],
+  "groups": [
+   {
+    "title": "Predict",
+    "text": "Graph neural networks that turn a structure into energies and properties.",
+    "cards": [
+     {
+      "name": "High-entropy-alloy screening for CO₂ reduction",
+      "input": "Cu-based high-entropy alloy surfaces",
+      "output": "Predicted adsorption energies and a ranking of active compositions",
+      "how": "A graph neural network trained on DFT adsorption energies, applied across many alloy compositions.",
+      "doi": "10.1016/s1872-2067(24)60264-0"
+     },
+     {
+      "name": "Air-to-ammonia catalysts",
+      "input": "Non-precious-metal catalyst candidates",
+      "output": "Shortlist for converting air to ammonia",
+      "how": "Graph-neural-network-driven exploration of a large candidate space.",
+      "doi": "10.1002/adma.202509915"
+     },
+     {
+      "name": "Active-learning fine-tuning",
+      "input": "A network trained on non-aqueous data plus a few new DFT calculations",
+      "output": "A model that works under new conditions",
+      "how": "Active learning picks the most informative calculations for fine-tuning.",
+      "doi": "10.1021/acs.jctc.5c00089"
+     },
+     {
+      "name": "Amines for carbon capture",
+      "input": "Amine molecular structures",
+      "output": "Heat of absorption with CO₂",
+      "how": "Predictive graph neural networks that expose structure–property relationships.",
+      "doi": "10.1016/j.ces.2026.125310"
+     },
+     {
+      "name": "PFAS on transition metals",
+      "input": "PFAS intermediates on metal surfaces",
+      "output": "Adsorption energies and scaling relationships",
+      "how": "Machine-learning models of intermediate adsorption for environmental catalysis.",
+      "doi": "10.1021/acs.est.5c09683"
+     }
+    ]
+   },
+   {
+    "title": "Discover",
+    "text": "Searching beyond known materials: active learning, generative design and trade-off search.",
+    "cards": [
+     {
+      "name": "Active learning for CO₂ electrocatalysts",
+      "input": "Copper-containing intermetallic surfaces",
+      "output": "Cu–Al, made and tested with collaborators",
+      "how": "Active machine learning guided which DFT calculations to run across the search space.",
+      "numbers": "Over 80% Faradaic efficiency to ethylene at 400 mA cm⁻² in experiment",
+      "doi": "10.1038/s41586-020-2242-8",
+      "demo": "active"
+     },
+     {
+      "name": "Generative discovery of alloy catalysts",
+      "input": "A target reaction: radical-mediated methane to methanol",
+      "output": "New alloy catalyst candidates",
+      "how": "A generative model proposes compositions instead of only ranking known ones.",
+      "doi": "10.1021/jacs.6c07881"
+     },
+     {
+      "name": "Pareto front for high-entropy alloys",
+      "input": "Thousands of alloy compositions",
+      "output": "The activity–stability trade-off curve",
+      "how": "Multi-objective search for candidates that nothing else beats on both counts.",
+      "doi": "10.1039/d5sc06100h",
+      "demo": "design"
+     },
+     {
+      "name": "A structure–energy descriptor",
+      "input": "Alloy surface composition and structure",
+      "output": "Adsorption energy estimates for rational alloy design",
+      "how": "A quantitative structure–energy equation used as a descriptor.",
+      "doi": "10.1039/c9cc09251j"
+     }
+    ]
+   },
+   {
+    "title": "Reason",
+    "text": "Language-model systems that plan calculations and help people learn chemistry.",
+    "cards": [
+     {
+      "name": "CatPath-GPT",
+      "input": "A catalyst design question in plain language",
+      "output": "A planned and executed computational workflow",
+      "how": "A mixture-of-experts system built on large language models.",
+      "doi": "10.1002/smm2.70080",
+      "tool": "CatPath-GPT"
+     },
+     {
+      "name": "ChEdu",
+      "input": "A student’s chemistry question",
+      "output": "Guided, step-by-step help for courses and exams",
+      "how": "An AI teaching assistant with guardrails for education.",
+      "doi": "10.1021/acs.jchemed.5c00036",
+      "tool": "ChEdu"
+     }
+    ]
+   }
+  ],
+  "reviews": [
+   "10.1063/5.0227821",
+   "10.1016/s1872-2067(23)64612-1",
+   "10.1016/j.checat.2025.101458"
+  ],
+  "limitations": "Models are only as good as the DFT data behind them, and predictions far from the chemistry they were trained on need checking. Every candidate we report is confirmed with DFT and, where possible, with experiment."
+ },
+ "dft": {
+  "tagline": "Following reactions one atom at a time",
+  "demos": [
+   {
+    "id": "neb3d",
+    "label": "Minimum energy path",
+    "ctl": "neb",
+    "caption": "A nudged-elastic-band (NEB) calculation running live in your browser. A chain of images slides downhill on a model energy surface (Müller–Brown, with minima A, B and C) until it traces the minimum-energy path; the climbing image then settles on the saddle point, the transition state, whose height above the start is the barrier. Pick other end points, change the number of images or the spring, and drag to turn the surface. We run the same method with DFT on real catalyst surfaces."
+   },
+   {
+    "id": "compute",
+    "label": "Atom hop on Cu(111)",
+    "ctl": "hop",
+    "caption": "CO hopping between hollow sites on a three-layer Cu(111) slab, crossing a transition state each time. Schematic, not a computed trajectory."
+   }
+  ],
+  "overview": [
+   "Density functional theory tells us how strongly molecules bind to a surface and how high the barriers are between them. From those numbers we build reaction networks and micro-kinetic models that predict which product a catalyst makes, and how fast.",
+   "Real electrocatalysis happens in water, under an electric field, with ions close by. We model these interfaces with explicit solvent, cations and applied potential, so that calculated mechanisms can be compared with what is measured.",
+   "Most of our DFT work is done with experimental groups around the world: we explain what they see, and predict what to make next."
+  ],
+  "groups": [
+   {
+    "title": "Methods we are known for",
+    "text": "",
+    "cards": [
+     {
+      "name": "Mechanisms at the interface",
+      "input": "A catalyst surface under reaction conditions",
+      "output": "Which elementary step controls the product",
+      "how": "DFT reaction paths for C–C coupling on copper.",
+      "doi": "10.1021/jacs.2c01044"
+     },
+     {
+      "name": "Free-energy landscapes",
+      "input": "Adsorption and desorption at finite temperature",
+      "output": "A free-energy landscape rather than a single energy",
+      "how": "First-principles sampling of CO on Pt(111).",
+      "doi": "10.1021/acs.jpcc.8b06782"
+     },
+     {
+      "name": "Beyond the volcano",
+      "input": "Catalysts that change phase under reaction",
+      "output": "Design rules past the traditional volcano curve",
+      "how": "A theoretical framework for multi-phase catalysts.",
+      "doi": "10.1039/c5sc01732g"
+     },
+     {
+      "name": "Theory-guided synthesis",
+      "input": "A predicted active structure",
+      "output": "Low-coordination copper made by guided electrochemical restructuring",
+      "how": "Calculations set the target; experiments make and test it.",
+      "doi": "10.1002/anie.202319936"
+     },
+     {
+      "name": "Stable water oxidation",
+      "input": "A metal–organic framework superstructure",
+      "output": "Why it stays active and stable",
+      "how": "DFT alongside experiment on a polyoxometalated MOF.",
+      "doi": "10.1126/science.ads1466"
+     }
+    ]
+   }
+  ],
+  "limitations": "DFT is accurate to roughly a tenth of an electron-volt and becomes expensive for large or dynamic systems, which is why we pair it with machine learning and always compare with experiment."
+ },
+ "exp": {
+  "tagline": "From prediction to the bench",
+  "demos": [
+   {
+    "id": "plasma",
+    "label": "",
+    "ctl": "",
+    "caption": ""
+   }
+  ],
+  "overview": [
+   "We are starting our own experiments: electrochemistry and plasma-driven reactions that test our predictions directly. The first paper led by the group is on its way."
+  ],
+  "groups": [],
+  "collab_title": "Experiments with our collaborators",
+  "collab": [
+   "10.1021/jacs.4c12858",
+   "10.1002/ece2.70109",
+   "10.1016/j.cej.2026.176166"
+  ],
+  "limitations": ""
+ }
+}

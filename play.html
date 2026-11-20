@@ -1,0 +1,506 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>T-Cat’s Journey</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="The Theoretical Catalysis Group at the University of Auckland: a small planet of people, three planets of research, and every paper we have published.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* Home: the group's planet with three research planets in orbit, then every paper as a galaxy, then the people. Simple; details live on other pages. */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--paper); }
+section.block { padding-block: 56px 20px; }
+.sec-h { display: grid; gap: 6px; margin-bottom: 20px; max-width: 64ch; }
+.sec-h h2 { font-size: clamp(2rem, 4.6vw, 3rem); line-height: 1.05; }
+.sec-h p { margin: 0; color: var(--muted); }
+
+/* hero: the planet system fills the first screen; the words sit small in the corners */
+.hero { position: relative; height: clamp(560px, calc(100svh - 56px), 920px); overflow: hidden; }
+.intro { position: absolute; z-index: 3; top: 18px; left: max(16px, env(safe-area-inset-left, 0px), calc((100vw - 1140px) / 2)); max-width: 330px; pointer-events: none; }
+.intro a, .intro button { pointer-events: auto; }
+.hero h1 { font-size: clamp(2rem, 3.4vw, 2.9rem); line-height: 1; font-weight: 600; }
+.hero h1 em { display: block; font-size: .5em; color: var(--muted); font-weight: 500; margin-top: 6px; }
+.hero p { margin: 10px 0 0; color: var(--muted); font-size: .95rem; }
+.ledger { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+.ledger div { display: grid; }
+.ledger b { font: 600 1.45rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.ledger span { font: .6rem var(--mono); color: var(--muted); letter-spacing: .14em; text-transform: uppercase; margin-top: 3px; }
+.system { position: absolute; inset: 0; }
+.system canvas, .system .poster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.system .poster { object-fit: contain; padding: 4% 14%; transition: opacity .8s; }
+.system canvas { opacity: 0; transition: opacity .8s; touch-action: pan-y; cursor: grab; }
+.system.live canvas { opacity: 1; } .system.live .poster { opacity: 0; }
+.plabel { position: absolute; z-index: 2; transform: translate(-50%, 0); text-decoration: none; text-align: center; white-space: nowrap; background: rgba(251,246,233,.88); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px 4px; transition: opacity .3s, transform .3s var(--bounce); }
+.plabel b { font: 600 1.05rem/1.1 var(--display); display: block; }
+.plabel span { font: .64rem var(--mono); color: var(--muted); }
+.plabel:hover { transform: translate(-50%, -3px); border-color: var(--ink); }
+.plabel i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.who { position: absolute; z-index: 3; pointer-events: none; background: var(--paper2); border: 1px solid var(--ink); border-radius: 12px 12px 12px 3px; padding: 5px 12px; transform: translate(12px, -110%); white-space: nowrap; }
+.who b { font: 600 1.15rem/1.1 var(--display); display: block; }
+.who span { font: .68rem var(--mono); color: var(--muted); }
+.quick { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.quick .cap { width: 100%; font-size: .6rem; letter-spacing: .14em; }
+.quick a { text-decoration: none; font: 600 .98rem var(--display); display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; background: rgba(251,246,233,.88); border: 1px solid var(--line); border-radius: 999px; pointer-events: auto; }
+.quick a:hover { border-color: var(--ink); }
+.quick i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.hint3d { position: absolute; right: max(16px, calc((100vw - 1140px) / 2)); bottom: 20px; z-index: 2; color: var(--muted); }
+@media (max-width: 760px) {
+  .hero { height: auto; overflow: visible; display: grid; }
+  .intro { position: static; max-width: none; padding: 14px 16px 0; }
+  .hero p { display: none; }
+  .system { position: relative; height: 66svh; min-height: 420px; }
+  .hint3d { display: none; }
+}
+
+/* galaxy */
+.galaxy { position: relative; height: clamp(440px, 70vh, 620px); padding: 0; overflow: hidden; }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
+.g-over { position: absolute; left: 12px; right: 12px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; pointer-events: none; }
+.g-over > * { pointer-events: auto; }
+.g-over.t { top: 10px; } .g-over.b { bottom: 10px; align-items: flex-end; }
+.legend { display: flex; flex-wrap: wrap; gap: 3px 12px; max-width: 560px; background: rgba(251,246,233,.88); border-radius: 6px; padding: 5px 9px; }
+.legend button { display: inline-flex; align-items: center; gap: 6px; font: .8rem var(--body); color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; }
+.legend.dim button[data-t]:not([aria-pressed="true"]) { opacity: .4; }
+.legend .sw { width: 10px; height: 10px; border-radius: 50%; }
+.seg { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.seg .sbtn { font-size: .95rem; padding: 3px 12px; }
+.big-year { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: italic 600 clamp(4rem, 14vw, 10rem)/1 var(--display); color: rgba(43,53,80,.08); pointer-events: none; }
+.scan { position: absolute; z-index: 3; pointer-events: none; max-width: min(300px, 80vw); background: var(--paper2); border: 1px solid var(--ink); border-radius: 4px; box-shadow: 0 10px 24px -14px rgba(43,53,80,.6); padding: 8px 12px; font-size: .84rem; line-height: 1.4; transform: translate(14px, 14px); opacity: 0; transition: opacity .15s; }
+.scan.on { opacity: 1; } .scan.pinned { pointer-events: auto; }
+.scan b { display: block; margin-bottom: 4px; font-family: var(--display); font-size: 1.02rem; }
+.scan .m { color: var(--muted); font: .7rem var(--mono); }
+.after { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+
+/* people */
+.crew { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px 8px; }
+.crew a { text-decoration: none; display: grid; justify-items: center; text-align: center; gap: 0; padding: 6px 2px; border-radius: 10px; transition: transform .45s var(--bounce), background .3s; }
+.crew a:hover { transform: translateY(-6px); background: rgba(251,246,233,.8); }
+.crew img { width: 100%; max-width: 120px; aspect-ratio: 1; }
+.crew b { font: 600 1.05rem/1.15 var(--display); }
+.crew span { font: .62rem var(--mono); color: var(--muted); }
+.crew a.pi img { filter: drop-shadow(0 0 0 transparent); }
+@media (prefers-reduced-motion: reduce) { .crew a, .plabel { transition: none; } }
+
+.finale { padding: 30px; text-align: center; display: grid; gap: 12px; justify-items: center; margin-block: 30px 40px; }
+.finale h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+.finale p { margin: 0; color: var(--muted); max-width: 56ch; }
+.addr { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; font-family: var(--mono); font-size: .9rem; }
+
+/* T-Cat guide */
+.guide { position: fixed; z-index: 35; left: max(12px, env(safe-area-inset-left, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: flex-end; gap: 8px; pointer-events: none; max-width: min(380px, calc(100vw - 24px)); }
+.guide > * { pointer-events: auto; }
+.guide .cat { width: 54px; height: 54px; flex: none; cursor: pointer; filter: drop-shadow(0 6px 6px rgba(43,53,80,.25)); animation: idle 3.2s ease-in-out infinite; }
+@keyframes idle { 50% { transform: translateY(-5px) rotate(-4deg); } }
+.guide .say { background: var(--paper2); border: 1px solid var(--ink); border-radius: 14px 14px 14px 3px; padding: 7px 28px 7px 12px; font: italic 500 1rem/1.35 var(--display); position: relative; }
+.guide .say b { font-style: normal; font-weight: 600; }
+.guide .x { position: absolute; top: 2px; right: 6px; border: 0; background: none; cursor: pointer; font-size: 1rem; color: var(--muted); }
+.guide.min .say { display: none; }
+@media (max-width: 560px) { .guide .cat { width: 42px; height: 42px; } .guide .say { font-size: .9rem; } }
+@media (prefers-reduced-motion: reduce) { .guide .cat { animation: none; } }
+</style>
+
+<header class="top"><div class="wrap">
+  <a class="me" href="#home"><img src="assets/shield.png" alt=""><b>T-Cat’s Journey</b></a>
+  <nav aria-label="Site">
+    <details class="menu"><summary>Fields</summary><div class="drop"><a href="field.html#ml">Machine learning</a><a href="field.html#dft">DFT computation</a><a href="field.html#exp">Experiment</a><a href="field.html#all">All papers</a></div></details>
+    <details class="menu"><summary>People</summary><div class="drop" id="peopleMenu"></div></details>
+    <a href="#papers">Papers</a>
+  </nav>
+</div></header>
+
+<main>
+  <section class="hero" id="home" aria-labelledby="title">
+    <div class="system" id="system">
+      <img class="poster" src="assets/planet-poster.png" alt="The group sitting in a circle round a glowing atom on a small green planet">
+      <canvas id="sys" aria-label="The group's planet with three research planets in orbit. Tap a planet to open that field; tap a person to open their page."></canvas>
+      <div id="labels"></div>
+      <div class="who" id="who" hidden></div>
+    </div>
+    <div class="intro">
+      <div class="cap">Theoretical Catalysis Group</div>
+      <h1 id="title">T-Cat’s Journey<em>Ziyun Wang Group · University of Auckland</em></h1>
+      <p>Machine learning and first-principles chemistry for better catalysts.</p>
+      <div class="ledger" aria-label="Group publication record">
+        <div><b data-count="works">0</b><span>papers</span></div>
+        <div><b data-count="citations">0</b><span>citations</span></div>
+        <div><b data-count="h">0</b><span>h-index</span></div>
+      </div>
+      <nav class="quick" aria-label="Quick links">
+        <span class="cap">Or go straight to</span>
+        <a href="field.html#ml"><i style="background:#D9773F"></i>Machine learning</a>
+        <a href="field.html#dft"><i style="background:#3E8EE8"></i>DFT computation</a>
+        <a href="field.html#exp"><i style="background:#2FA57E"></i>Experiment</a>
+        <a href="people.html"><i style="background:#2b3550"></i>People</a>
+      </nav>
+    </div>
+    <div class="hint3d mono">drag to turn · tap a planet or a person</div>
+  </section>
+
+  <section class="wrap block" id="papers" aria-labelledby="papers-title">
+    <div class="sec-h"><div class="cap">Every paper</div><h2 id="papers-title">A galaxy of papers</h2><p>Each sphere is one of our papers: size is citations, colour is the field. Drag to spin it; click a sphere to open the paper.</p></div>
+    <div class="page galaxy" id="fieldWrap">
+      <canvas id="field" aria-label="3D map of the group's papers"></canvas>
+      <div class="big-year" id="bigYear" aria-hidden="true"></div>
+      <div class="scan" id="scan"></div>
+      <div class="g-over t"><div class="legend" id="legend"></div><button class="sbtn" id="replay">Replay the years</button></div>
+      <div class="g-over b"><div class="seg" id="modes" role="group" aria-label="Arrange papers">
+        <button class="sbtn" data-m="tower" aria-pressed="true">Time tower</button><button class="sbtn" data-m="topics" aria-pressed="false">Field moons</button><button class="sbtn" data-m="impact" aria-pressed="false">Impact</button></div>
+        <span class="mono" id="syncText" style="background:rgba(251,246,233,.85);border-radius:4px;padding:2px 8px">Loading…</span></div>
+    </div>
+    <div class="after"><span class="mono">Papers from OpenAlex, matched by ORCID and refreshed automatically</span><a class="sbtn" href="field.html#all">Read the full list →</a></div>
+  </section>
+
+  <section class="wrap block" id="people" aria-labelledby="people-title">
+    <div class="sec-h"><div class="cap">The people</div><h2 id="people-title">Who lives on the planet</h2><p>Tap someone to visit their page.</p></div>
+    <div class="crew" id="crew"></div>
+    <div class="after"><span></span><a class="sbtn" href="people.html">Everyone’s pages →</a></div>
+  </section>
+
+  <section class="wrap" id="join" aria-labelledby="join-title">
+    <div class="page finale">
+      <h2 id="join-title">Come and join the journey</h2>
+      <p>We welcome PhD students, postdocs and visitors from chemistry, materials science, physics and computer science.</p>
+      <div class="addr"><span id="email">ziyun.wang@auckland.ac.nz</span><button class="sbtn" id="copyEmail" type="button">Copy email</button></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot"><div class="wrap"><img src="assets/logo.png" alt="The Theoretical Catalysis Group, New Zealand"><span>School of Chemical Sciences, University of Auckland · <a href="https://claude.ai/artifact/Ewh5bHPRo1b3YbCU7nj1NB">Classic site</a></span></div></footer>
+
+<div class="guide" id="guide">
+  <img class="cat" src="assets/shield.png" alt="T-Cat, the group mascot" id="cat">
+  <div class="say" role="status" aria-live="polite"><span id="sayText"></span><button class="x" id="sayX" aria-label="Hide T-Cat’s notes">×</button></div>
+</div>
+
+<script src="js/common.js"></script>
+<script>
+/* ---------- every paper as a 3D galaxy ---------- */
+const Galaxy = (() => {
+  const cv = $("#field"), ctx = cv.getContext("2d"), wrap = $("#fieldWrap"), scan = $("#scan"), balls = TOPICS.map(t => ball(t.color));
+  const cam = { yaw: .7, pitch: .38, d: 3.4, s: 1, cx: 0, cy: 0, touched: 0, lastDrag: 0 };
+  let W = 0, H = 0, nodes = [], mode = "tower", topic = null, guides = null, mouse = { x: -1e4, y: -1e4 }, hover = null, pinned = null, play = null, visible = true, running = false;
+  const isDragging = dragRotate(cv, cam);
+  function setData(pubs) {
+    const old = new Map(nodes.map(n => [n.p.t, n]));
+    nodes = pubs.map(p => {
+      const n = old.get(p.t) || { x: (hash(p.t) - .5) * .2, y: (hash(p.d) - .5) * .2, z: (hash(p.j + p.t) - .5) * .2, a: 0, ex: 0, ox: 0, oy: 0, ph: hash(p.j + p.t) * 6.28 };
+      n.p = p; n.topic = topicOf(p); n.ai = n.topic === 0; n.time = p.d ? +p.d.slice(0, 4) + (+p.d.slice(5, 7) - 1) / 12 : p.y; n.base = 2.4 + Math.sqrt(p.c) * .42;
+      n.co = new Set(p.a.filter(x => x !== "Ziyun Wang")); return n;
+    });
+    layout();
+  }
+  function layout() {
+    if (!nodes.length) return;
+    const tmin = Math.floor(Math.min(...nodes.map(n => n.time))), tmax = Math.max(...nodes.map(n => n.time)), span = tmax - tmin || 1;
+    if (mode === "tower") {
+      const counts = TOPICS.map((_, i) => nodes.filter(n => n.topic === i).length), gap = .14, total = Math.PI * 2 - gap * TOPICS.length; let a = 0; const secs = [];
+      TOPICS.forEach((_, i) => { const s = total * counts[i] / nodes.length; secs.push([a, a + s]); a += s + gap; });
+      nodes.forEach(n => { const [a0, a1] = secs[n.topic], ang = a0 + (a1 - a0) * (.05 + .9 * hash(n.p.t)), r = .42 + .5 * Math.sqrt(hash(n.p.d + n.p.j)); n.tx = Math.cos(ang) * r; n.tz = Math.sin(ang) * r; n.ty = ((n.time - tmin) / span - .5) * 1.8; });
+      const step = span > 10 ? 4 : 2, rings = []; for (let y = Math.ceil((tmin + 1) / step) * step; y <= tmax; y += step) rings.push({ y, h: ((y - tmin) / span - .5) * 1.8 });
+      guides = { type: "tower", rings };
+    } else if (mode === "topics") {
+      const V = TOPICS.map((_, i, a) => { const z = 1 - 2 * (i + .5) / a.length, q = Math.sqrt(1 - z * z), th = i * 2.39996; return [q * Math.cos(th) * .8, z * .8, q * Math.sin(th) * .8]; }), labels = [];
+      TOPICS.forEach((t, i) => {
+        const own = nodes.filter(n => n.topic === i).sort((a, b) => b.p.c - a.p.c), R = .08 + .06 * Math.cbrt(own.length);
+        own.forEach((n, j) => { const rr = R * Math.cbrt((j + .5) / own.length), th = j * 2.39996, z = 1 - 2 * (((j + .5) * .618034) % 1), q = Math.sqrt(1 - z * z); n.tx = V[i][0] + rr * q * Math.cos(th); n.ty = V[i][1] + rr * z; n.tz = V[i][2] + rr * q * Math.sin(th); });
+        if (own.length) labels.push({ t: t.name, x: V[i][0], y: V[i][1] + R + .1, z: V[i][2] });
+      });
+      guides = { type: "topics", labels };
+    } else {
+      const maxC = Math.max(...nodes.map(n => n.p.c)), L = Math.log10(maxC + 1);
+      nodes.forEach(n => { n.tx = ((n.time - tmin) / span - .5) * 1.9; n.ty = (Math.log10(n.p.c + 1) / L - .5) * 1.3; n.tz = (n.topic - 2.5) * .15; });
+      const yt = [0, 10, 100, 1000].filter(v => v <= maxC * 1.2).map(v => ({ v, h: (Math.log10(v + 1) / L - .5) * 1.3 }));
+      const xt = []; for (let y = Math.ceil(tmin / 4) * 4; y <= tmax; y += 4) xt.push({ v: y, x: ((y - tmin) / span - .5) * 1.9 });
+      guides = { type: "impact", yt, xt };
+    }
+    const now = performance.now(); nodes.forEach(n => n.delay = now + (REDUCE ? 0 : hash(n.p.t + mode) * 400));
+    if (REDUCE) nodes.forEach(n => { n.x = n.tx; n.y = n.ty; n.z = n.tz; });
+    kick();
+  }
+  const P = (x, y, z) => project(x, y, z, cam);
+  function drawGuides() {
+    ctx.save(); ctx.strokeStyle = "rgba(43,53,80,.25)"; ctx.fillStyle = "rgba(43,53,80,.8)"; ctx.lineWidth = 1; ctx.font = "11px JetBrains Mono, monospace"; ctx.textAlign = "center";
+    if (guides.type === "tower") {
+      const front = Math.atan2(-Math.cos(cam.yaw), -Math.sin(cam.yaw));
+      ctx.setLineDash([3, 5]);
+      for (const g of guides.rings) { ctx.beginPath(); for (let i = 0; i <= 48; i++) { const a = i / 48 * Math.PI * 2, q = P(Math.cos(a), g.h, Math.sin(a)); i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y); } ctx.stroke(); }
+      ctx.setLineDash([]);
+      const b = P(0, -1, 0), tp = P(0, 1.05, 0); ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(tp.x, tp.y); ctx.stroke(); ctx.font = "italic 600 14px Cormorant Garamond, serif"; ctx.fillText("now ↑", tp.x, tp.y - 6); ctx.font = "11px JetBrains Mono, monospace";
+      for (const g of guides.rings) { const q = P(Math.cos(front) * 1.12, g.h, Math.sin(front) * 1.12); ctx.fillStyle = "rgba(251,246,233,.92)"; ctx.fillRect(q.x - 18, q.y - 8, 36, 15); ctx.fillStyle = "rgba(43,53,80,.85)"; ctx.fillText(g.y, q.x, q.y + 4); }
+    } else if (guides.type === "topics") {
+      ctx.font = "italic 600 16px Cormorant Garamond, serif";
+      for (const l of guides.labels) { const q = P(l.x, l.y, l.z); ctx.globalAlpha = clamp((q.f - .7) * 2, .35, 1); ctx.fillText(l.t, q.x, q.y); }
+    } else {
+      const box = [[-1, -.7, -.5], [1, -.7, -.5], [1, -.7, .5], [-1, -.7, .5]];
+      ctx.beginPath(); box.forEach((v, i) => { const q = P(...v); i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y); }); ctx.closePath(); ctx.stroke();
+      for (const t of guides.yt) { const a = P(-1, t.h, -.5), b = P(1, t.h, -.5); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.textAlign = "right"; ctx.fillText(t.v, a.x - 6, a.y + 4); }
+      ctx.textAlign = "center"; for (const t of guides.xt) { const q = P(t.x, -.7, .5); ctx.fillText(t.v, q.x, q.y + 16); }
+      const q = P(-1, .72, -.5); ctx.textAlign = "left"; ctx.fillText("citations (log)", q.x + 4, q.y - 4);
+    }
+    ctx.restore();
+  }
+  function frame(now) {
+    running = false; [W, H] = hidpi(cv, ctx);
+    cam.cx = W / 2; cam.cy = H / 2 + 6; cam.s = Math.min(W, H) * (mode === "impact" ? .44 : .36);
+    const idle = now - cam.touched > 2500 && !isDragging() && !hover;
+    if (!REDUCE && idle) { if (mode === "impact") { const tgt = -.32; cam.yaw += Math.atan2(Math.sin(tgt - cam.yaw), Math.cos(tgt - cam.yaw)) * .04; cam.pitch += (.18 - cam.pitch) * .04; } else cam.yaw += .0025; }
+    if (play) { play.t = play.from + (play.to - play.from) * Math.min(1, (now - play.start) / play.dur); $("#bigYear").textContent = Math.floor(play.t); if (play.t >= play.to) { play = null; $("#bigYear").textContent = ""; $("#replay").textContent = "Replay the years"; } }
+    ctx.clearRect(0, 0, W, H);
+    if (guides) drawGuides();
+    for (const n of nodes) {
+      if (now > n.delay) { const k = REDUCE ? 1 : .07; n.x += (n.tx - n.x) * k; n.y += (n.ty - n.y) * k; n.z += (n.tz - n.z) * k; }
+      const target = play && n.time > play.t ? 0 : (topic !== null && n.topic !== topic ? .15 : 1);
+      if (play && n.a < .05 && target > 0) n.ex = 1;
+      n.a += (target - n.a) * .12;
+      const q = P(n.x, n.y, n.z); n.sx = q.x; n.sy = q.y; n.f = q.f; n.sz = q.z; n.R = Math.min(18, n.base) * clamp(Math.min(W, H) / 560, .6, 1.1) * q.f;
+      const dx = n.sx - mouse.x, dy = n.sy - mouse.y, d = Math.hypot(dx, dy), RR = 70; let fx = 0, fy = 0;
+      if (d < RR && !REDUCE && n !== hover) { const f = (1 - d / RR) ** 2 * 12; fx = dx / (d || 1) * f; fy = dy / (d || 1) * f; n.ex = Math.max(n.ex, (1 - d / RR) * .7); }
+      n.ox += (fx - n.ox) * .15; n.oy += (fy - n.oy) * .15; n.ex *= .95;
+    }
+    let best = null, bd = 1e9;
+    for (const n of nodes) { if (n.a < .3) continue; const d = Math.hypot(n.sx + n.ox - mouse.x, n.sy + n.oy - mouse.y); if (d < n.R + 6 && (d - n.sz * 30) < bd) { bd = d - n.sz * 30; best = n; } }
+    hover = pinned && pinned.a > .3 ? pinned : best; showScan();
+    const order = [...nodes].sort((a, b) => b.sz - a.sz);
+    if (hover) { ctx.strokeStyle = TOPICS[hover.topic].color; ctx.globalAlpha = .5; ctx.lineWidth = 1.2;
+      for (const n of nodes) if (n !== hover && n.a > .3 && [...n.co].some(x => hover.co.has(x))) { ctx.beginPath(); ctx.moveTo(hover.sx + hover.ox, hover.sy + hover.oy); ctx.lineTo(n.sx + n.ox, n.sy + n.oy); ctx.stroke(); n.ex = Math.max(n.ex, .5); }
+      ctx.globalAlpha = 1; }
+    const t = now / 1000;
+    for (const n of order) {
+      if (n.a < .01) continue;
+      const x = n.sx + n.ox, y = n.sy + n.oy, r = n.R * (1 + n.ex * .3) * (n === hover ? 1.3 : 1);
+      ctx.globalAlpha = n.a * clamp(.35 + (n.f - .75) * 1.6, .35, 1);
+      ctx.drawImage(balls[n.topic], x - r, y - r, r * 2, r * 2);
+      if (n.ai) { const rx = r + 5, ry = (r + 5) * .42, rot = n.ph, e = REDUCE ? n.ph : t * 1.8 + n.ph; ctx.strokeStyle = "rgba(63,143,160,.9)"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, rot, 0, 7); ctx.stroke(); ctx.fillStyle = "#3f8fa0"; ctx.beginPath(); ctx.arc(x + rx * Math.cos(e) * Math.cos(rot) - ry * Math.sin(e) * Math.sin(rot), y + rx * Math.cos(e) * Math.sin(rot) + ry * Math.sin(e) * Math.cos(rot), 2.2, 0, 7); ctx.fill(); }
+      if (n === hover) { ctx.strokeStyle = INK; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x, y, r + 4, 0, 7); ctx.stroke(); }
+    }
+    ctx.globalAlpha = 1;
+    if (visible) kick();
+  }
+  function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+  function showScan() {
+    if (!hover) { scan.classList.remove("on"); cv.style.cursor = "grab"; return; }
+    const p = hover.p;
+    const k = p.t + (hover === pinned);
+    if (scan.dataset.k !== k) { scan.dataset.k = k; scan.innerHTML = `<b>${esc(p.t)}</b><span style="color:${TOPICS[hover.topic].color}">●</span> <i>${esc(SHORT_J[p.j] || p.j)}</i> · ${p.y}<div class="m">${fmt(p.c)} citations · ${esc(TOPICS[hover.topic].name)}</div>${hover === pinned ? `<a class="sbtn gold" style="margin-top:8px" href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">Open paper ↗</a>` : `<div class="m">click to open</div>`}`; }
+    scan.classList.toggle("pinned", hover === pinned);
+    scan.style.left = clamp(hover.sx, 0, W - 320) + "px"; scan.style.top = clamp(hover.sy, 0, H - 130) + "px"; scan.classList.add("on"); cv.style.cursor = "pointer";
+  }
+  cv.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+  cv.addEventListener("pointerleave", () => { mouse = { x: -1e4, y: -1e4 }; });
+  // mouse: click opens the paper; touch: a tap pins the card, whose button opens it
+  let downAt = null;
+  cv.addEventListener("pointerdown", e => { downAt = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", e => {
+    if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 8) return;
+    const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, reach = e.pointerType === "mouse" ? 6 : 22;
+    let best = null, bd = 1e9;
+    for (const n of nodes) { if (n.a < .3) continue; const d = Math.hypot(n.sx + n.ox - x, n.sy + n.oy - y) - n.R; if (d < reach && d < bd) { bd = d; best = n; } }
+    if (!best) { pinned = null; return; }
+    if (e.pointerType === "mouse") { if (best.p.doi) window.open("https://doi.org/" + best.p.doi, "_blank", "noopener"); }
+    else { pinned = best; mouse = { x, y }; cam.touched = performance.now(); }
+  });
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(wrap);
+  return {
+    setData, setMode(m) { mode = m; cam.touched = 0; layout(); }, setTopic(t) { topic = t; },
+    replay() { if (!nodes.length) return; const from = Math.floor(Math.min(...nodes.map(n => n.time))), to = Math.max(...nodes.map(n => n.time)); play = { from, to, t: from, start: performance.now(), dur: REDUCE ? 1 : 9000 }; nodes.forEach(n => n.a = 0); $("#replay").textContent = "Replaying…"; kick(); }
+  };
+})();
+(function galaxyUI() {
+  const lg = $("#legend");
+  lg.innerHTML = TOPICS.map((t, i) => `<button data-t="${i}" aria-pressed="false"><span class="sw" style="background:${t.color}"></span>${esc(t.name)}${t.key === "exp" ? " · first paper coming soon" : ""}</button>`).join("");
+  lg.querySelectorAll("button[data-t]").forEach(b => b.addEventListener("click", () => {
+    const on = b.getAttribute("aria-pressed") !== "true";
+    lg.querySelectorAll("button[data-t]").forEach(x => x.setAttribute("aria-pressed", "false")); b.setAttribute("aria-pressed", on); lg.classList.toggle("dim", on);
+    Galaxy.setTopic(on ? +b.dataset.t : null);
+  }));
+  document.querySelectorAll("#modes button").forEach(b => b.addEventListener("click", () => { document.querySelectorAll("#modes button").forEach(x => x.setAttribute("aria-pressed", x === b)); Galaxy.setMode(b.dataset.m); }));
+  $("#replay").addEventListener("click", () => Galaxy.replay());
+})();
+
+
+/* ---------- people ---------- */
+let PEOPLE = [];
+loadPeople().then(pp => {
+  PEOPLE = pp; wireMenus(pp);
+  $("#crew").innerHTML = pp.map(p => `<a href="people.html#${p.slug}"${p.role === "Principal investigator" ? ' class="pi"' : ""}><img loading="lazy" src="assets/avatars/${p.slug}.png" alt=""><b>${esc(p.name)}</b><span>${esc(roleOne(p.role))}</span></a>`).join("");
+  fixHome();
+});
+
+/* ---------- T-Cat guide ---------- */
+const Guide = (() => {
+  const LINES = {
+    home: "Hello, I’m <b>T-Cat</b>. Tap one of the <b>three planets</b> to visit a field, or tap any of us.",
+    papers: "Every paper we’ve written. <b>Drag</b> to spin it and <b>tap</b> a sphere to read it.",
+    people: "My friends! Tap anyone to visit their page.",
+    join: "Like what you see? Come and play with atoms with us."
+  };
+  let typing = null, hidden = false, last = "";
+  function say(k) {
+    if (k === last || hidden || !LINES[k]) return; last = k; const el = $("#sayText"), html = LINES[k]; clearInterval(typing);
+    if (REDUCE) { el.innerHTML = html; return; }
+    const plain = html.replace(/<[^>]+>/g, ""); let i = 0;
+    typing = setInterval(() => { i += 2; el.textContent = plain.slice(0, i); if (i >= plain.length) { clearInterval(typing); el.innerHTML = html; } }, 20);
+  }
+  $("#sayX").addEventListener("click", () => { hidden = true; $("#guide").classList.add("min"); });
+  if (innerWidth < 700) setTimeout(() => { hidden = true; $("#guide").classList.add("min"); }, 7000);
+  $("#cat").addEventListener("click", () => { hidden = !hidden; $("#guide").classList.toggle("min", hidden); if (!hidden) { const k = last; last = ""; say(k || "home"); } });
+  const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) say(e.target.id); }), { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll("main > section").forEach(s => spy.observe(s));
+  return { say };
+})();
+
+/* ---------- numbers ---------- */
+let DATA = null;
+function renderStats() {
+  document.querySelectorAll("[data-count]").forEach(el => {
+    const to = DATA.stats[el.dataset.count], from = +el.textContent.replace(/\D/g, "") || 0, t0 = performance.now(), dur = REDUCE ? 0 : 1600;
+    const tick = now => { const f = dur ? Math.min(1, (now - t0) / dur) : 1; el.textContent = fmt(Math.round(from + (to - from) * (1 - (1 - f) ** 3))); if (f < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  });
+  $("#syncText").textContent = DATA.live ? "live from OpenAlex" : `synced ${DATA.synced}`;
+  window.DATA_READY = DATA; window.dispatchEvent(new CustomEvent("papers", { detail: DATA }));
+}
+$("#copyEmail").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText($("#email").textContent); $("#copyEmail").textContent = "Copied"; }
+  catch { const r = document.createRange(); r.selectNodeContents($("#email")); getSelection().removeAllRanges(); getSelection().addRange(r); }
+});
+Guide.say("home");
+loadPapers(d => { DATA = d; renderStats(); Galaxy.setData(d.pubs); });
+</script>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+/* The hero: the group's planet (Blender, blender/build_planet.py) with the three field planets in orbit round it. */
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wrap = document.getElementById("system"), cv = document.getElementById("sys"), who = document.getElementById("who"), labelBox = document.getElementById("labels");
+const FIELDS = [{ key: "ml", name: "Machine learning", color: "#D9773F" }, { key: "dft", name: "DFT computation", color: "#3E8EE8" }, { key: "exp", name: "Experiment", color: "#2FA57E" }];
+const ROLE = { "Principal investigator": "Principal investigator", "Postdoctoral fellows": "Postdoctoral fellow", "PhD students": "PhD student", "Master's students": "Master’s student" };
+const slugOf = n => n.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "");
+const goto = href => { location.href = href; };
+// GLTFLoader puts every node's name in userData.name; only the people carry a role (from Blender custom properties).
+const isPerson = o => o.userData && "role" in o.userData;
+const nameOf = o => (o.userData.name || "").replace(/^person:/, "");
+
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
+renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, .1, 300); scene.add(camera);
+const controls = new OrbitControls(camera, cv);
+controls.target.set(0, .2, 0); controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = false;
+controls.minPolarAngle = .5; controls.maxPolarAngle = 1.45;
+scene.add(new THREE.HemisphereLight(0xfff3da, 0xc8b08a, 1.5));
+const sun = new THREE.DirectionalLight(0xfff0d6, 2.3); sun.position.set(-10, 12, 4); camera.add(sun); scene.add(sun.target);
+sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -.0004; sun.shadow.normalBias = .02;
+Object.assign(sun.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 80 });
+const fill = new THREE.DirectionalLight(0xdce6ff, .5); fill.position.set(12, -2, -6); camera.add(fill);
+
+const home = new THREE.Group(); scene.add(home);
+const ORBIT = 7.6, TILT = .34, orbitPlane = new THREE.Group(); orbitPlane.rotation.x = TILT; scene.add(orbitPlane);
+{ // dotted orbit
+  const pts = []; for (let i = 0; i <= 160; i++) { const a = i / 160 * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(a) * ORBIT, 0, Math.sin(a) * ORBIT)); }
+  const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({ color: 0xc39a4c, dashSize: .35, gapSize: .3, transparent: true, opacity: .8 }));
+  line.computeLineDistances(); orbitPlane.add(line);
+}
+const people = [], fields = [], spinners = [];
+const loadModel = (urls, ok, fail) => new GLTFLoader().load(urls[0], ok, undefined, () => urls.length > 1 ? loadModel(urls.slice(1), ok, fail) : fail && fail());
+const prep = o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; if (o.material.map) { o.material.alphaTest = .5; o.material.transparent = false; } } };
+let loaded = 0;
+loadModel(["assets/planet.glb", "assets/planet.glb.wasm"], g => {
+  home.add(g.scene); g.scene.traverse(o => { prep(o); if (isPerson(o)) people.push(o); });
+  g.scene.getObjectByName("atom")?.children.forEach((c, i) => { if (c.children.length) spinners.push({ o: c, s: .6 + i * .25 }); });
+  if (++loaded) { wrap.classList.add("live"); kick(); }
+});
+loadModel(["assets/fields.glb", "assets/fields.glb.wasm"], g => {
+  g.scene.traverse(prep);
+  const roots = []; g.scene.traverse(o => { if (o.userData && o.userData.field) roots.push(o); });
+  roots.forEach(r => {
+    const f = FIELDS.find(x => x.key === r.userData.field), i = FIELDS.indexOf(f), holder = new THREE.Group();
+    r.position.set(0, 0, 0); holder.add(r); orbitPlane.add(holder);
+    const a = document.createElement("a"); a.className = "plabel"; a.href = `field.html#${f.key}`;
+    a.innerHTML = `<b><i style="background:${f.color}"></i>${f.name}</b><span>open this planet →</span>`; labelBox.append(a);
+    fields.push({ ...f, holder, planet: r, label: a, phase: i * Math.PI * 2 / 3 + .6 });
+  });
+  window.addEventListener("papers", e => fields.forEach(f => {   // counts arrive with the paper data
+    const pubs = e.detail.pubs, n = pubs.filter(p => typeof topicOf === "function" && TOPICS[topicOf(p)].key === f.key).length;
+    f.label.querySelector("span").textContent = f.key === "exp" && !n ? "first paper coming soon →" : `${n} papers →`;
+  }));
+  if (window.DATA_READY) window.dispatchEvent(new CustomEvent("papers", { detail: window.DATA_READY }));
+  kick();
+});
+
+function size() {
+  const w = wrap.clientWidth, h = wrap.clientHeight, pr = renderer.getPixelRatio();
+  if (cv.width !== Math.round(w * pr) || cv.height !== Math.round(h * pr)) {
+    renderer.setSize(w, h, false); camera.aspect = w / h;
+    // pull the camera back just far enough for the whole orbit to fit this shape of screen
+    camera.fov = w / h < 1 ? 40 : 30; camera.updateProjectionMatrix();
+    const vh = Math.tan(camera.fov * Math.PI / 360), hh = vh * camera.aspect;
+    const d = Math.max((ORBIT + 2.4) / hh, 7.4 / vh);
+    const dir = size.done ? camera.position.clone().sub(controls.target).normalize() : new THREE.Vector3(0, .36, 1).normalize();
+    camera.position.copy(controls.target).addScaledVector(dir, d); size.done = true;
+  }
+}
+const v = new THREE.Vector3();
+function toScreen(obj, local = [0, 0, 0]) { v.set(...local); obj.localToWorld(v); const d = v.clone().project(camera); return { x: (d.x + 1) / 2 * wrap.clientWidth, y: (1 - d.y) / 2 * wrap.clientHeight, z: v.distanceTo(camera.position) }; }
+function pickAt(x, y, reach) {
+  // whichever is nearest the camera wins: a field planet's disc, or a person's head within reach
+  const hc = toScreen(home), hr = Math.abs(toScreen(home, [0, 4, 0]).y - hc.y), cands = [];
+  for (const f of fields) {
+    const c = toScreen(f.planet), e = toScreen(f.planet, [0, 1.6, 0]), r = Math.hypot(e.x - c.x, e.y - c.y) * 1.15;
+    const hidden = c.z > hc.z && Math.hypot(c.x - hc.x, c.y - hc.y) < hr;     // tucked behind our planet
+    if (!hidden && Math.hypot(c.x - x, c.y - y) < r + reach * .3) cands.push({ field: f, z: c.z });
+  }
+  let best = null, bd = reach;
+  for (const p of people) { const s = toScreen(p, [0, .5, 0]); if (s.z > hc.z + .5) continue; const d = Math.hypot(s.x - x, s.y - y); if (d < bd) { bd = d; best = { person: p, z: s.z }; } }
+  if (best) cands.push(best);
+  return cands.sort((a, b) => a.z - b.z)[0] || null;
+}
+let hover = null, down = null, px = 0, py = 0;
+window.__tcat = { pickAt, heads: () => people.map(p => [nameOf(p), toScreen(p, [0, .5, 0])]) };   // handy for checking taps
+function showWho() {
+  if (!hover) { who.hidden = true; cv.style.cursor = "grab"; return; }
+  if (hover.person) { const u = hover.person.userData; who.innerHTML = `<b>${nameOf(hover.person)}</b><span>${ROLE[u.role] || ""} · tap to visit</span>`; }
+  else who.innerHTML = `<b>${hover.field.name}</b><span>tap to open this planet</span>`;
+  who.style.left = px + "px"; who.style.top = py + "px"; who.hidden = false; cv.style.cursor = "pointer";
+}
+cv.addEventListener("pointermove", e => { const r = cv.getBoundingClientRect(); px = e.clientX - r.left; py = e.clientY - r.top; if (e.pointerType === "mouse" && !(e.buttons & 1)) { hover = pickAt(px, py, 18); showWho(); } kick(); });
+cv.addEventListener("pointerleave", () => { hover = null; showWho(); });
+cv.addEventListener("pointerdown", e => { down = [e.clientX, e.clientY]; });
+cv.addEventListener("pointerup", e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 8) return;
+  const r = cv.getBoundingClientRect(), hit = pickAt(e.clientX - r.left, e.clientY - r.top, e.pointerType === "mouse" ? 18 : 34);
+  if (!hit) return;
+  if (hit.field) goto(`field.html#${hit.field.key}`);
+  else goto(`people.html#${slugOf(nameOf(hit.person))}`);
+});
+let autoOn = !REDUCE, resume = 0;
+controls.addEventListener("start", () => { autoOn = false; clearTimeout(resume); });
+controls.addEventListener("end", () => { resume = setTimeout(() => { autoOn = !REDUCE; kick(); }, 4000); });
+
+let visible = true, running = false, last = performance.now();
+new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) kick(); }).observe(wrap);
+function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+function frame(t) {
+  running = false; size();
+  const dt = Math.min(.05, (t - last) / 1000); last = t; const move = REDUCE ? 0 : 1;
+  controls.autoRotate = autoOn && !hover; controls.autoRotateSpeed = .25; controls.update();
+  home.rotation.y += dt * .05 * move * (hover ? 0 : 1);
+  for (const s of spinners) s.o.rotation.z += dt * s.s * move;
+  const hc = toScreen(home), hz = hc.z, hr = Math.hypot(toScreen(home, [0, 4, 0]).y - hc.y, 0);
+  for (const f of fields) {
+    if (!hover || hover.field !== f) f.phase += dt * .05 * move;
+    f.holder.position.set(Math.cos(f.phase) * ORBIT, 0, Math.sin(f.phase) * ORBIT);
+    f.planet.rotation.y += dt * .3 * move;
+    const c = toScreen(f.planet), far = c.z > hz, s = toScreen(f.planet, [0, far ? 2.3 : -2.0, 0]), behind = far && Math.hypot(c.x - hc.x, c.y - hc.y) < hr * .8;
+    const half = f.label.offsetWidth / 2; f.label.style.left = Math.min(Math.max(s.x, half + 2), wrap.clientWidth - half - 2) + "px"; f.label.style.top = (far ? s.y - f.label.offsetHeight : s.y) + "px"; f.label.style.opacity = behind ? .15 : 1; f.label.style.pointerEvents = behind ? "none" : "auto";
+  }
+  renderer.render(scene, camera);
+  if (visible && !REDUCE) kick();
+}
+addEventListener("resize", kick);
+</script>

@@ -1,0 +1,10 @@
+{
+  "groups": [
+    { "role": "Principal investigator", "members": ["Assoc. Prof. Ziyun Wang"] },
+    { "role": "Postdoctoral fellows", "members": ["Dr. Yu Mao", "Dr. Wensheng Fang"] },
+    { "role": "PhD students", "members": ["Yingxin Li", "Ruihu Lu", "Xiu Wang", "Chengyi Zhang", "Xingyu Wang", "Mengyao Chang", "Mengjiao Li", "Xingbao Chen", "Shijia Li", "Zhanghao Ren", "Botong Chu", "Liwei Zhang"] },
+    { "role": "Master's students", "members": ["Zhekang Zhao"] },
+    { "role": "Visitors", "members": ["Rui Huang", "Siwen Zhang", "Sibo Yin", "Tianxiong Liu", "Zhuo Li", "Jingjing Shi", "Yuhang Han"] },
+    { "role": "Alumni", "members": ["Dr. Jiexin Zhu", "Dr. Yuying Zhao", "Dr. Ziyi Li", "Prof. Hang Xu", "Zihao Jiao", "Yan Liu", "Junyao Wu", "Jiajian Guan", "Dr. Kai Sun", "Prof. Can Li", "Prof. Dawei Jiang", "Chanthip Wangphon", "Jianping Sun", "Yiming Zou", "Yang Wang", "Wenqing Chu", "Kunpeng Gao"] }
+  ]
+}

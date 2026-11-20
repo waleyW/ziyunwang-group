@@ -1,0 +1,194 @@
+{
+ "_help": "Personal pages (people.html#slug). Bios come from each person's page on the old group site; edit freely.",
+ "people": [
+  {
+   "name": "Ziyun Wang",
+   "slug": "ziyun-wang",
+   "role": "Principal investigator",
+   "look": "male",
+   "email": "ziyun.wang@auckland.ac.nz",
+   "focus": "Theoretical catalysis and machine learning",
+   "bio": "Dr. Ziyun Wang is a computational chemist specializing in theoretical catalysis and machine learning. He did his doctoral research at Queen’s University Belfast and the University of Manchester with Prof. Peijun Hu and Prof. Chris Hardacre, then postdoctoral research at Stanford University with Prof. Jens Nørskov and Prof. Thomas Bligaard, and with Prof. Edward Sargent at the University of Toronto. He joined the School of Chemical Sciences at the University of Auckland in 2021, where he is an Associate Professor. He is a Clarivate Highly Cited Researcher and is listed among Stanford’s World’s Top 2% Scientists.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/",
+   "links": [
+    {
+     "label": "Google Scholar",
+     "url": "https://scholar.google.com/citations?user=icq-mHoAAAAJ"
+    },
+    {
+     "label": "University profile",
+     "url": "https://profiles.auckland.ac.nz/ziyun-wang"
+    },
+    {
+     "label": "ORCID",
+     "url": "https://orcid.org/0000-0002-2817-8367"
+    }
+   ]
+  },
+  {
+   "name": "Yu Mao",
+   "slug": "yu-mao",
+   "role": "Postdoctoral fellows",
+   "look": "male",
+   "email": "yu.mao@auckland.ac.nz",
+   "focus": "DFT and AIMD for electrocatalysis",
+   "bio": "Dr. Yu Mao earned his Ph.D. in Physical Chemistry from Queen’s University Belfast and his B.E. in Applied Chemistry from East China University of Science and Technology. With a background in theoretical chemistry and heterogeneous catalysis, he is currently focusing on understanding and designing catalysts for electrocatalytic reactions (e.g., CO2RR, OER/ORR) using DFT and MD/AIMD calculations.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/postdoctoral-fellows/dr-yu-mao/",
+   "links": []
+  },
+  {
+   "name": "Wensheng Fang",
+   "slug": "wensheng-fang",
+   "role": "Postdoctoral fellows",
+   "look": "male",
+   "email": "VensonF@163.com",
+   "focus": "Nanomaterials and CO₂ reduction devices",
+   "bio": "Wensheng Fang obtained his PhD degree in 2025 at Huazhong University of Science and Technology (HUST). His current research primarily focuses on the synthesis of functional nanomaterials and the design of devices for electrocatalytic carbon dioxide reduction.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/postdoctoral-fellows/dr-wensheng-fang/",
+   "links": []
+  },
+  {
+   "name": "Yingxin Li",
+   "slug": "yingxin-li",
+   "role": "PhD students",
+   "look": "female",
+   "email": "yli424@aucklanduni.ac.nz",
+   "focus": "CO₂ reduction for food applications",
+   "bio": "Yingxin Li started her undergraduate studies in science at the University of Auckland, majoring in food science. After receiving her Bachelor of Science degree, she then pursued an honors degree, and in August 2022, she graduated with her honors degree in Food Science with first-class honors. She decided to study further and started her PhD in November 2022. Due to uncontrollable circumstances, she switched from food science to chemistry science, taking on the challenge of studying a new path focusing on integrating CO2 reduction with food applications. She joined Dr Ziyun Wang’s group in early 2023.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/yingxin-li/",
+   "links": []
+  },
+  {
+   "name": "Ruihu Lu",
+   "slug": "ruihu-lu",
+   "role": "PhD students",
+   "look": "male",
+   "email": "rlu039@aucklanduni.ac.nz",
+   "focus": "Theory-guided CO₂ reduction catalysts",
+   "bio": "Ruihu Lu received his master’s degree in the school of Materials Science and Engineering at Wuhan University of Technology. With a background in material science and theoretical computations. He joined the Wang group in 2023 as a Ph.D. student. He is currently focusing on theoretical investigation on CO2 reduction and theoretical-guided experimental catalyst’s discovery for the selective CO2RR towards various carbonous production, including formic acid, ethanol, ethylene et al.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/ruihu-lu/",
+   "links": []
+  },
+  {
+   "name": "Xiu Wang",
+   "slug": "xiu-wang",
+   "role": "PhD students",
+   "look": "female",
+   "email": "xwan754@aucklanduni.ac.nz",
+   "focus": "Plasmon-assisted CO₂ electroreduction",
+   "bio": "Xiu Wang received her M.S. degree from the School of Science, Nanjing University of Aeronautics and Astronautics. She is currently under the supervision of Dr. Ziyun Wang for her Ph.D. degree. Her research primarily focuses on unraveling the mechanisms of plasmonic-assisted electrocatalysis in the CO2 reduction reaction.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/xiu-wang/",
+   "links": []
+  },
+  {
+   "name": "Chengyi Zhang",
+   "slug": "chengyi-zhang",
+   "role": "PhD students",
+   "look": "male",
+   "email": "czha145@aucklanduni.ac.nz",
+   "focus": "Machine learning and DFT for CO₂ reduction",
+   "bio": "Chengyi Zhang received his master’s degree in the Institute of technological science, Wuhan University. He joined the Wang group in 2023 as Ph.D. student. He is investigating the mechanism of CO2RR by machine learning and DFT simulation.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/chengyi-zhang/",
+   "links": []
+  },
+  {
+   "name": "Xingyu Wang",
+   "slug": "xingyu-wang",
+   "role": "PhD students",
+   "look": "female",
+   "email": "axnw494@auckland.ac.nz",
+   "focus": "Machine learning in chemistry",
+   "bio": "Xingyu Wang received her M.S. degree from the School of Chemistry, Sichuan University. She is currently under the supervision of Dr. Ziyun Wang for her Ph.D. degree. Her research primarily focuses on machine learning in chemistry.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/xingyu-wang/",
+   "links": []
+  },
+  {
+   "name": "Mengyao Chang",
+   "slug": "mengyao-chang",
+   "role": "PhD students",
+   "look": "female",
+   "email": "mcha968@aucklanduni.ac.nz",
+   "focus": "Electrocatalyst surface design",
+   "bio": "Mengyao Chang earned her M.S. degree in Materials and Chemical Engineering from the Beijing University of Chemical Technology. With a background in synthesizing, modifying, and evaluating inorganic nanomaterials, she now focuses on designing electrocatalyst surfaces to understand the mechanisms of various electrochemical reactions better.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/mengjiao-chang/",
+   "links": []
+  },
+  {
+   "name": "Mengjiao Li",
+   "slug": "mengjiao-li",
+   "role": "PhD students",
+   "look": "female",
+   "email": "mli368@aucklanduni.ac.nz",
+   "focus": "Theory-guided catalyst design",
+   "bio": "Mengjiao Li received her M.S. degree from the School of Science, Tianjin University. She is currently under the supervision of Dr. Ziyun Wang for her Ph.D. degree. Her research primarily focuses on the advanced catalysts’ design under theory-guided experiments.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/mengjiao-li/",
+   "links": []
+  },
+  {
+   "name": "Xingbao Chen",
+   "slug": "xingbao-chen",
+   "role": "PhD students",
+   "look": "male",
+   "email": "317372@whut.edu.cn",
+   "focus": "CO₂ reduction catalysts and in-situ characterisation",
+   "bio": "Xingbao Chen earned his B.S. in Material Forming and Control Engineering from Hubei University of Technology, Hubei, China, and acquired his M.S. in Material Science and Engineering from Wuhan University of Technology, Hubei, China. He is pursuing his Ph.D. at the University of Auckland under the guidance of Dr. Ziyun Wang and Prof. Paul Kilmartin. He specializes in designing catalysts aimed at enhancing CO2 electrochemical reduction performance and unraveling their mechanisms through meticulous in-situ and ex-situ characterization. He joined Dr. Wang’s group in September 2024.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/xingbao-chen/",
+   "links": []
+  },
+  {
+   "name": "Shijia Li",
+   "slug": "shijia-li",
+   "role": "PhD students",
+   "look": "female",
+   "email": "sli281@aucklanduni.ac.nz",
+   "focus": "Nitrate reduction and ammonia synthesis",
+   "bio": "Shijia Li received her M.S. degree from the School of Materials Science and Engineering, East China University of Science and Technology. She is currently under the supervision of Dr. Ziyun Wang for her Ph.D. Degree. Her research primarily focuses on designing catalysts for electrocatalytic nitrate reduction reaction and ammonia synthesis.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/shijia-li/",
+   "links": []
+  },
+  {
+   "name": "Zhanghao Ren",
+   "slug": "zhanghao-ren",
+   "role": "PhD students",
+   "look": "male",
+   "email": "",
+   "focus": "Machine learning",
+   "bio": "Zhanghao Ren is a member of the Theoretical Catalysis Group working on machine learning.",
+   "source": "",
+   "links": []
+  },
+  {
+   "name": "Botong Chu",
+   "slug": "botong-chu",
+   "role": "PhD students",
+   "look": "male",
+   "email": "bchu565@aucklanduni.ac.nz",
+   "focus": "Electrochemical simulation and reactor design",
+   "bio": "Botong Chu joined Wang’s group in 2023. He graduated with a bachelor’s degree in chemistry from Northeast Forestry University. His primary research areas involve using computer-aided engineering (CAE) to simulate electrochemical reactions (e.g., CO2RR, HER, and NO3RR), electrolyzer/battery design, plasma reactor optimization, and computational fluid dynamics. Botong is dedicated to applying simulation calculations to achieve practical technological applications.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/ph-d/botong-chu/",
+   "links": []
+  },
+  {
+   "name": "Liwei Zhang",
+   "slug": "liwei-zhang",
+   "role": "PhD students",
+   "look": "male",
+   "email": "",
+   "focus": "Machine learning",
+   "bio": "Liwei Zhang is a member of the Theoretical Catalysis Group working on machine learning.",
+   "source": "",
+   "links": []
+  },
+  {
+   "name": "Zhekang Zhao",
+   "slug": "zhekang-zhao",
+   "role": "Master's students",
+   "look": "male",
+   "email": "zahz769@aucklanduni.ac.nz",
+   "focus": "DFT for urea synthesis and CO₂ reduction",
+   "bio": "Zhekang Zhao graduated with a bachelor’s degree in chemistry from Northeast Forestry University in 2025 and is currently pursuing a BSc (Honours) in Chemistry at the University of Auckland. His primary research areas involve using DFT calculations to study urea synthesis and CO2RR.",
+   "source": "https://ziyunwang.auckland.ac.nz/teams/master-students/zhekang-zhao/",
+   "links": []
+  }
+ ]
+}

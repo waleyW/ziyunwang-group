@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fields of T-Cat’s Journey</title>
+<meta name="description" content="Machine learning, DFT computation and experiment in the Theoretical Catalysis Group: try it yourself, then read how it works and the papers behind it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<style>
+/* A field page, in the order the Open Catalyst pages use: try it, what it is, how it works, its limits, the papers. */
+.banner { border-bottom: 1px solid var(--line); background: radial-gradient(ellipse at 50% 30%, #fffaf0, #efe3c7); }
+.stage { height: clamp(380px, 60vh, 560px); position: relative; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.demo-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; padding-block: 10px 4px; }
+.tabs, .ctl { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ctl label { font: .74rem var(--mono); color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+.ctl input[type=range] { width: 110px; accent-color: var(--ink); }
+.ctl select { font: italic 600 1rem var(--display); color: var(--ink); background: var(--paper2); border: 1.5px solid var(--ink); border-radius: 999px; padding: 3px 10px; }
+.caption { margin: 4px 0 0; padding-bottom: 14px; color: var(--muted); font-size: .92rem; max-width: 92ch; }
+.caption b { color: var(--ink); font-weight: 600; }
+.head { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 22px; align-items: center; padding-block: 34px 6px; }
+.head img { width: 120px; height: auto; }
+.head h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.05; }
+.head .tag { font: italic 500 1.35rem var(--display); color: var(--muted); margin-top: 4px; }
+@media (max-width: 600px) { .head { grid-template-columns: 80px minmax(0, 1fr); gap: 14px; } .head img { width: 80px; } }
+.overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px 28px; margin: 18px 0 8px; }
+.overview p { margin: 0; }
+.overview p:first-child::first-letter { font: 600 3rem/.8 var(--display); float: left; margin: 6px 6px 0 0; color: var(--gold); }
+.grp { margin-top: 34px; }
+.grp h2 { font-size: 1.9rem; }
+.grp > p { margin: 2px 0 12px; color: var(--muted); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; }
+.card { padding: 18px 18px 16px; display: grid; gap: 8px; align-content: start; transition: transform .4s var(--bounce); }
+.card:hover { transform: translateY(-4px) rotate(-.4deg); }
+.card h3 { font-size: 1.35rem; line-height: 1.15; }
+.card .src { font: italic 500 .98rem var(--display); color: var(--navy); }
+.io { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; font-size: .9rem; }
+.io dt { font: .66rem/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.io dd { margin: 0; }
+.num { font-size: .88rem; background: rgba(195,154,76,.14); border-radius: 6px; padding: 4px 8px; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.links a, .links button { font: italic 600 .98rem var(--display); color: var(--navy); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
+.links a:hover, .links button:hover { text-decoration: underline; }
+.soon { font: .7rem var(--mono); color: var(--muted); }
+.reviews { margin-top: 26px; color: var(--muted); }
+.reviews a { color: var(--ink); }
+.limits { margin-top: 30px; padding: 16px 18px; border-left: 3px solid var(--gold); background: rgba(251,246,233,.7); }
+.limits h3 { font-size: 1.3rem; }
+.limits p { margin: 4px 0 0; color: var(--muted); }
+.papers-h { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: baseline; justify-content: space-between; }
+.papers-h h2 { font-size: 1.9rem; }
+#q { flex: 1 1 220px; min-width: 0; max-width: 420px; font: inherit; color: var(--ink); background: var(--paper2); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; }
+.pubs { list-style: none; margin: 10px 0 0; padding: 0; }
+.pub { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 4px 16px; padding: 14px 6px; border-top: 1px solid var(--line); }
+.pub .when { font: .74rem var(--mono); color: var(--muted); padding-top: 3px; }
+.pub a { font-weight: 600; text-decoration: none; }
+.pub a:hover { color: var(--navy); text-decoration: underline; }
+.pub .au { color: var(--muted); font-size: .85rem; margin-top: 2px; }
+.pub .au mark { background: none; color: var(--ink); font-weight: 600; }
+.pub .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: .86rem; align-items: center; }
+.pub .jr { font: italic 500 1.02rem var(--display); color: var(--navy); }
+.tagm { font: .66rem var(--mono); letter-spacing: .06em; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; }
+.cites { font: .74rem var(--mono); color: var(--muted); white-space: nowrap; padding-top: 3px; }
+@media (max-width: 620px) { .pub { grid-template-columns: minmax(0, 1fr); } }
+.more { display: flex; gap: 14px; align-items: center; margin: 16px 0 40px; }
+.empty-exp { padding: 20px 0; font: italic 500 1.3rem/1.4 var(--display); color: var(--muted); list-style: none; }
+.others { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding-block: 20px 50px; border-top: 1px solid var(--line); }
+.others a { text-decoration: none; display: grid; justify-items: center; gap: 2px; text-align: center; transition: transform .45s var(--bounce); }
+.others a:hover { transform: translateY(-6px); }
+.others img { width: min(130px, 100%); }
+.others b { font: 600 1.15rem var(--display); }
+.others a.on { opacity: .4; pointer-events: none; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="me" href="play.html"><img src="assets/shield.png" alt=""><b>T-Cat’s Journey</b></a>
+  <nav aria-label="Site">
+    <details class="menu"><summary>Fields</summary><div class="drop"><a href="field.html#ml">Machine learning</a><a href="field.html#dft">DFT computation</a><a href="field.html#exp">Experiment</a><a href="field.html#all">All papers</a></div></details>
+    <details class="menu"><summary>People</summary><div class="drop" id="peopleMenu"></div></details>
+    <a href="play.html">Home</a>
+  </nav>
+</div></header>
+
+<main>
+  <section class="banner" id="banner" aria-label="Try it">
+    <div class="stage" id="stage"></div>
+    <div class="wrap demo-bar"><div class="tabs" id="tabs"></div><div class="ctl" id="ctl"></div></div>
+    <div class="wrap"><p class="caption" id="caption"></p></div>
+  </section>
+
+  <div class="wrap">
+    <div class="head"><img id="fieldImg" src="assets/field-dft.png" alt=""><div><div class="cap" id="fieldCap"></div><h1 id="fieldTitle">Fields</h1><div class="tag" id="tagline"></div></div></div>
+    <div class="overview" id="overview"></div>
+    <div id="groups"></div>
+    <div id="limits"></div>
+    <div class="papers-h"><h2 id="papersTitle">Papers</h2><input id="q" type="search" placeholder="Search titles, journals, authors" aria-label="Search papers"><span class="mono" id="count"></span></div>
+    <ol class="pubs" id="list"></ol>
+    <div class="more"><button class="sbtn" id="moreBtn">Show more</button></div>
+    <nav class="others" aria-label="Other fields">
+      <a href="field.html#ml" data-k="ml"><img src="assets/field-ml.png" alt=""><b>Machine learning</b></a>
+      <a href="field.html#dft" data-k="dft"><img src="assets/field-dft.png" alt=""><b>DFT computation</b></a>
+      <a href="field.html#exp" data-k="exp"><img src="assets/field-exp.png" alt=""><b>Experiment</b></a>
+    </nav>
+  </div>
+</main>
+<footer class="foot"><div class="wrap"><img src="assets/logo.png" alt="The Theoretical Catalysis Group, New Zealand"><span>School of Chemical Sciences, University of Auckland<br><span class="mono">Papers from OpenAlex (CC0), refreshed automatically</span></span></div></footer>
+
+<script src="js/common.js"></script>
+<script src="js/demos.js"></script>
+<script>
+/* Controls for each kind of demo. */
+const CTL = {
+  active: `<button class="sbtn gold" data-act="ai">Let the AI pick next</button><button class="sbtn" data-act="random">Pick at random</button><button class="sbtn" data-act="auto">Auto-run 12 AI picks</button><button class="sbtn" data-act="reveal">Reveal the hidden curve</button><button class="sbtn" data-act="reset">Reset</button>`,
+  new: `<button class="sbtn gold" data-act="new">Run a new search</button><span class="mono">drag to turn the surface</span>`,
+  learn: `<button class="sbtn gold" data-act="pass">Run message passing</button><span class="mono">or tap any atom</span>`,
+  neb: `<select id="ends" aria-label="Start and end of the path"><option value="AB">A → B</option><option value="AC">A → C</option><option value="CB">C → B</option></select>
+        <button class="sbtn gold" data-act="run">Run NEB</button><button class="sbtn" data-act="reset">Reset</button><button class="sbtn" data-act="ci">Climbing image on / off</button>
+        <label>images <input type="range" id="nimg" min="7" max="25" step="2" value="15"></label><label>spring <input type="range" id="kspr" min="100" max="1600" step="100" value="600"></label>`,
+  hop: `<button class="sbtn gold" data-act="hop">Hop *CO</button><span class="mono">drag to turn the slab</span>`,
+  screen: `<button class="sbtn gold" data-act="run">Screen 1,000 candidates</button><button class="sbtn" data-act="reset">Reset</button>`,
+  "": ""
+};
+let PAPERS = [], FIELDS = null, TOOLS = [], key = "dft", query = "", shown = 25;
+const byDoi = doi => PAPERS.find(p => (p.doi || "").toLowerCase() === doi.toLowerCase());
+
+function mount(i) {
+  const list = FIELDS[key].demos, d = list[i], stage = $("#stage");
+  stage.innerHTML = ""; const root = document.createElement("div"); root.dataset.demo = d.id; root.style.cssText = "position:absolute;inset:0"; root.innerHTML = "<canvas></canvas>"; stage.append(root);
+  const demo = mountDemo(root);
+  $("#ctl").innerHTML = CTL[d.ctl] || "";
+  $("#ctl").querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", () => demo.act?.(b.dataset.act)));
+  $("#ends")?.addEventListener("change", e => demo.act(`ends:${e.target.value}`));
+  $("#nimg")?.addEventListener("change", e => demo.act(`n:${e.target.value}`));
+  $("#kspr")?.addEventListener("input", e => demo.act(`k:${e.target.value}`));
+  $("#tabs").innerHTML = list.length > 1 ? list.map((x, j) => `<button class="sbtn" aria-pressed="${j === i}" data-i="${j}">${esc(x.label)}</button>`).join("") : "";
+  $("#tabs").querySelectorAll("button").forEach(b => b.addEventListener("click", () => mount(+b.dataset.i)));
+  $("#caption").textContent = d.caption; $("#caption").hidden = !d.caption;
+  $(".demo-bar").hidden = !d.ctl && list.length < 2;
+}
+function card(c) {
+  const p = byDoi(c.doi), tool = c.tool && TOOLS.find(t => t.name === c.tool);
+  const demoIdx = c.demo ? FIELDS[key].demos.findIndex(d => d.id === c.demo) : -1;
+  return `<article class="page card"><h3>${esc(c.name)}</h3>
+    ${p ? `<div class="src">${esc(jname(p.j))}, ${p.y}</div>` : ""}
+    <dl class="io"><dt>in</dt><dd>${esc(c.input)}</dd><dt>out</dt><dd>${esc(c.output)}</dd><dt>how</dt><dd>${esc(c.how)}</dd></dl>
+    ${c.numbers ? `<div class="num">${esc(c.numbers)}</div>` : ""}
+    <div class="links"><a href="https://doi.org/${esc(c.doi)}" target="_blank" rel="noopener">Read the paper ↗</a>
+      ${tool ? (tool.url ? `<a href="${esc(tool.url)}" target="_blank" rel="noopener">Launch ${esc(tool.name)} ↗</a>` : `<span class="soon">online demo coming soon</span>`) : ""}
+      ${demoIdx >= 0 ? `<button data-try="${demoIdx}">Try a version above ↑</button>` : ""}</div></article>`;
+}
+function renderField() {
+  const f = FIELDS?.[key]; if (!f) { $("#overview").innerHTML = $("#groups").innerHTML = $("#limits").innerHTML = ""; return; }
+  $("#tagline").textContent = f.tagline;
+  $("#overview").innerHTML = f.overview.map(t => `<p>${esc(t)}</p>`).join("");
+  let g = f.groups.map(gr => `<section class="grp"><h2>${esc(gr.title)}</h2>${gr.text ? `<p>${esc(gr.text)}</p>` : ""}<div class="cards">${gr.cards.map(card).join("")}</div></section>`).join("");
+  if (f.collab?.length) g += `<section class="grp"><h2>${esc(f.collab_title)}</h2><p>Papers where our calculations sit alongside our collaborators’ experiments.</p><ol class="pubs">${f.collab.map(byDoi).filter(Boolean).map(row).join("")}</ol></section>`;
+  if (f.reviews?.length) { const rs = f.reviews.map(byDoi).filter(Boolean); if (rs.length) g += `<p class="reviews">Our reviews: ${rs.map(r => `<a href="https://doi.org/${esc(r.doi)}" target="_blank" rel="noopener">${esc(r.t)}</a> (${esc(jname(r.j))}, ${r.y})`).join("; ")}.</p>`; }
+  $("#groups").innerHTML = g;
+  $("#groups").querySelectorAll("[data-try]").forEach(b => b.addEventListener("click", () => { mount(+b.dataset.try); $("#banner").scrollIntoView({ behavior: REDUCE ? "auto" : "smooth" }); }));
+  $("#limits").innerHTML = f.limitations ? `<div class="limits"><h3>Limitations</h3><p>${esc(f.limitations)}</p></div>` : "";
+}
+function authors(a) {
+  const list = a.length > 8 ? [...a.slice(0, 6), "…", a[a.length - 1]] : a.slice();
+  if (a.length > 8 && !list.includes("Ziyun Wang") && a.includes("Ziyun Wang")) list.splice(list.length - 1, 0, "Ziyun Wang", "…");
+  return list.map(n => n === "Ziyun Wang" ? "<mark>Ziyun Wang</mark>" : esc(n)).join(", ");
+}
+function row(p) {
+  const tp = TOPICS[topicOf(p)], r = reactionOf(p);
+  return `<li class="pub"><div class="when">${esc(p.d.slice(0, 7) || p.y)}</div>
+    <div><a href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">${esc(p.t)}</a><div class="au">${authors(p.a)}</div>
+    <div class="meta"><span class="jr">${esc(jname(p.j))}</span>${key === "all" ? `<span class="tagm" style="color:${tp.color};border-color:${tp.color}">${esc(tp.name)}</span>` : ""}${r ? `<span class="tagm">${esc(r)}</span>` : ""}</div></div>
+    <div class="cites">${fmt(p.c)} cites</div></li>`;
+}
+function renderList() {
+  const idx = TOPICS.findIndex(t => t.key === key);
+  let ps = key === "all" ? PAPERS : PAPERS.filter(p => topicOf(p) === idx);
+  if (query) { const q = query.toLowerCase(); ps = ps.filter(p => (p.t + " " + p.j + " " + p.a.join(" ")).toLowerCase().includes(q)); }
+  $("#count").textContent = PAPERS.length ? `${fmt(ps.length)} papers` : "";
+  if (key === "exp" && !ps.length && !query) { $("#list").innerHTML = `<li class="empty-exp">Our first experimental paper as first authors is on its way. It will appear here as soon as it is out.</li>`; $("#moreBtn").hidden = true; return; }
+  $("#list").innerHTML = ps.slice(0, shown).map(row).join("") || `<li class="pub"><div></div><div>No papers match. Clear the search.</div></li>`;
+  $("#moreBtn").hidden = ps.length <= shown;
+}
+function route() {
+  const k = location.hash.slice(1); key = ["ml", "dft", "exp", "all"].includes(k) ? k : "dft"; shown = 25; query = ""; $("#q").value = "";
+  const t = TOPICS.find(x => x.key === key);
+  document.title = `${t ? t.name : "All papers"} · T-Cat’s Journey`;
+  $("#fieldCap").textContent = t ? "Planet · " + t.name : "Every planet";
+  $("#fieldTitle").textContent = t ? t.name : "All our papers";
+  $("#papersTitle").textContent = key === "exp" ? "Our own experimental papers" : t ? `Our ${t.name.toLowerCase()} papers` : "Every paper, newest first";
+  $("#fieldImg").src = `assets/field-${t ? key : "dft"}.png`;
+  document.querySelectorAll(".others a").forEach(a => a.classList.toggle("on", a.dataset.k === key));
+  $("#banner").hidden = key === "all" || !FIELDS;
+  if (key !== "all" && FIELDS) mount(0);
+  renderField(); renderList(); scrollTo({ top: 0 });
+}
+$("#q").addEventListener("input", e => { query = e.target.value.trim(); shown = 25; renderList(); });
+$("#moreBtn").addEventListener("click", () => { shown += 50; renderList(); });
+addEventListener("hashchange", route);
+loadPeople().then(wireMenus);
+Promise.all([fetch("data/fields.json").then(r => r.json()), fetch("data/tools.json").then(r => r.json()).catch(() => ({ tools: [] }))])
+  .then(([f, t]) => { FIELDS = f; TOOLS = t.tools; route(); });
+loadPapers(d => { PAPERS = d.pubs; renderField(); renderList(); });
+route();
+</script>
+</body>
+</html>
