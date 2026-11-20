@@ -427,7 +427,7 @@ loadModel(["assets/fields.glb", "assets/fields.glb.wasm"], g => {
   });
   window.addEventListener("papers", e => fields.forEach(f => {   // counts arrive with the paper data
     const pubs = e.detail.pubs, n = pubs.filter(p => typeof topicOf === "function" && TOPICS[topicOf(p)].key === f.key).length;
-    f.label.querySelector("span").textContent = f.key === "exp" && !n ? "first paper coming soon →" : `${n} papers →`;
+    f.label.querySelector("span").textContent = f.key === "exp" && !n ? "→" : `${n} papers →`;
   }));
   if (window.DATA_READY) window.dispatchEvent(new CustomEvent("papers", { detail: window.DATA_READY }));
   kick();
