@@ -12,16 +12,20 @@ const TOPICS = [
   { key: "dft", name: "DFT computation", color: "#3E8EE8", blurb: "First-principles calculations of surfaces, reaction paths and transition states." },
   { key: "exp", name: "Experiment", color: "#2FA57E", blurb: "Our own electrochemistry and plasma experiments." }
 ];
-// Secondary tag only: the reaction a paper studies.
+// Secondary tag only: what the paper is about. Hand-checked per DOI in data/tags.json (tools/tag_papers.py); these rules only cover papers newer than that file.
 const REACTIONS = [
-  { name: "N₂ & urea", re: /nitrogen reduction|nitrate|nitrite|ammonia|urea|C[–-]N coupling|\bN2\b|N₂|amination|amine/i },
-  { name: "CO₂ & CO", re: /CO2|CO₂|\bCO\b|carbon dioxide|carbon monoxide|ethylene|acetate|ethanol|formate|formic|methane|C[–-]C coupling|multicarbon|syngas|carbamate/i },
-  { name: "Water, O₂ & H₂", re: /oxygen evolution|oxygen reduction|water oxidation|water splitting|hydrogen evolution|hydrogen oxidation|\bOER\b|\bHER\b|\bORR\b|electrolys|RuO|IrO|fuel cell|seawater/i },
-  { name: "Batteries", re: /batter|\bZn\b|Zn2|zinc|lithium|\bLi\b|sodium|anode|cathode|dendrite/i },
-  { name: "Selective synthesis", re: /hydrogenation|oxidation|acetylene|alcohol|aldehyde|chlorination|methanol|furfural|propylene|C[–-]H/i }
+  { name: "PFAS & carbon capture", re: /PFAS|perfluoro|polyfluoro|amine.CO2/i },
+  { name: "Batteries", re: /batter|Zn metal anode|Zn.ion|zinc.air|lithium|sodium.ion|solid electrolyte/i },
+  { name: "Nitrogen & urea", re: /nitrogen (electro)?reduction|nitrate|nitrite|ammonia|urea|C[–-]N coupling|N ?2|N₂|NOx|amination/i },
+  { name: "Thermal catalysis", re: /CO oxidation|oxidation of methane|dry reforming|Fischer|water.gas shift|zeolite/i },
+  { name: "Water, O₂ & H₂", re: /oxygen.evolution|oxygen.reduction|water oxidation|water splitting|seawater|hydrogen evolution|hydrogen oxidation|(OER|HER|HOR|ORR)|water electroly|hydrogen peroxide|H2O2|H₂O₂|fuel cell/i },
+  { name: "CO₂ & CO reduction", re: /CO ?2|CO₂|carbon dioxide|CO-to|CO electro|CO reduction|carbon monoxide|ethylene|acetate|ethanol|propanol|formate|formic|methanation|multi.?carbon|C[–-]C coupling|syngas|carbamate/i },
+  { name: "Organic electrosynthesis", re: /hydrogenation|alcohol|aldehyde|chlorination|furfural|C[–-]H|hydrazine|methanol|glycine/i },
+  { name: "Theory & methods", re: /descriptor|volcano|optimization framework|explicit solvent|transition state/i }
 ];
+let TAGS = {};
 let OVERRIDE = {};
-const reactionOf = p => (REACTIONS.find(r => r.re.test(p.t + " " + p.k)) || {}).name || "";
+const reactionOf = p => { const d = (p.doi || "").toLowerCase(); return d in TAGS ? TAGS[d] : (REACTIONS.find(r => r.re.test(p.t)) || {}).name || ""; };
 const topicOf = p => { const k = OVERRIDE[(p.doi || "").toLowerCase()], i = k ? TOPICS.findIndex(t => t.key === k) : -1; if (i >= 0) return i; return AI_RE.test(p.t) ? 0 : 1; };
 const isAI = p => topicOf(p) === 0;
 const ROLE_ONE = { "Postdoctoral fellows": "Postdoctoral fellow", "PhD students": "PhD student", "Master's students": "Master’s student", "Visitors": "Visiting researcher", "Alumni": "Alumni" };
@@ -62,7 +66,8 @@ async function fetchLive() {
 function loadPapers(onData) {
   let got = false;
   const cats = fetch("data/categories.json").then(r => r.json())
-    .then(d => { OVERRIDE = Object.fromEntries(Object.entries(d.overrides || {}).map(([k, v]) => [k.toLowerCase(), v])); }).catch(() => {});
+    .then(d => { OVERRIDE = Object.fromEntries(Object.entries(d.overrides || {}).map(([k, v]) => [k.toLowerCase(), v])); }).catch(() => {})
+    .then(() => fetch("data/tags.json")).then(r => r.json()).then(d => { TAGS = d.tags || {}; }).catch(() => {});
   cats.then(() => fetch("data/publications.json")).then(r => r.json()).then(d => { if (!got) onData(d); }).catch(() => {});
   cats.then(fetchLive).then(d => { got = true; onData(d); }).catch(() => {});
 }

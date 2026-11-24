@@ -158,7 +158,7 @@ function renderField() {
   const f = FIELDS?.[key]; if (!f) { $("#overview").innerHTML = $("#groups").innerHTML = $("#limits").innerHTML = ""; return; }
   $("#tagline").textContent = f.tagline;
   $("#overview").innerHTML = f.overview.map(t => `<p>${esc(t)}</p>`).join("");
-  let g = f.groups.map(gr => `<section class="grp"><h2>${esc(gr.title)}</h2>${gr.text ? `<p>${esc(gr.text)}</p>` : ""}<div class="cards">${gr.cards.map(card).join("")}</div></section>`).join("");
+  let g = f.groups.map(gr => `<section class="grp"><h2>${esc(gr.title)}</h2>${gr.text ? `<p>${esc(gr.text)}</p>` : ""}${gr.cards ? `<div class="cards">${gr.cards.map(card).join("")}</div>` : ""}${gr.papers ? `<ol class="pubs">${gr.papers.map(byDoi).filter(Boolean).map(row).join("")}</ol>` : ""}</section>`).join("");
   if (f.collab?.length) g += `<section class="grp"><h2>${esc(f.collab_title)}</h2><p>Papers where our calculations sit alongside our collaborators’ experiments.</p><ol class="pubs">${f.collab.map(byDoi).filter(Boolean).map(row).join("")}</ol></section>`;
   if (f.reviews?.length) { const rs = f.reviews.map(byDoi).filter(Boolean); if (rs.length) g += `<p class="reviews">Our reviews: ${rs.map(r => `<a href="https://doi.org/${esc(r.doi)}" target="_blank" rel="noopener">${esc(r.t)}</a> (${esc(jname(r.j))}, ${r.y})`).join("; ")}.</p>`; }
   $("#groups").innerHTML = g;

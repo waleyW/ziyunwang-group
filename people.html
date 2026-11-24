@@ -54,6 +54,7 @@ h1, h2, h3 { font-family: var(--display); margin: 0; font-weight: 600; text-wrap
 .papers a { text-decoration: none; font-weight: 600; }
 .papers a:hover { color: var(--navy); text-decoration: underline; }
 .papers .j { font: italic 500 1rem var(--display); color: var(--muted); }
+.papers .allp { margin: 12px 0 0; }
 .empty { color: var(--muted); font: italic 500 1.1rem var(--display); }
 .pager { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
 .source { color: var(--muted); font-size: .78rem; margin-top: 18px; }
@@ -107,6 +108,7 @@ function papersOf(p) {
 }
 function profile(i) {
   const p = PEOPLE[i], prev = PEOPLE[(i - 1 + PEOPLE.length) % PEOPLE.length], next = PEOPLE[(i + 1) % PEOPLE.length], papers = papersOf(p);
+  const sel = (p.selected || []).map(d => PUBS.find(x => x.doi.toLowerCase() === d.toLowerCase())).filter(Boolean);
   document.title = `${p.name} · T-Cat’s Journey`;
   $("#view").innerHTML = `
     <article class="page profile">
@@ -119,7 +121,8 @@ function profile(i) {
         ${p.bio ? `<p class="bio">${esc(p.bio)}</p>` : `<p class="bio empty">A longer introduction is on its way.</p>`}
         ${p.email ? `<div class="contact"><span class="addr" id="addr">${esc(p.email)}</span><button class="sbtn" id="copy" type="button">Copy email</button></div>` : ""}
         ${p.links?.length ? `<div class="links">${p.links.map(l => l.url.startsWith("mailto:") ? `<a class="sbtn" href="${esc(l.url)}">${esc(l.label)}</a>` : `<a class="sbtn" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>` : ""}
-        ${papers.length ? `<section class="papers"><h2>Recent papers with the group</h2><ol>${papers.map(x => `<li><a href="https://doi.org/${esc(x.doi)}" target="_blank" rel="noopener">${esc(x.t)}</a><div class="j">${esc(x.j)}, ${x.y}</div></li>`).join("")}</ol></section>` : ""}
+        ${sel.length ? `<section class="papers"><h2>Selected publications</h2><ol>${sel.map(x => `<li><a href="https://doi.org/${esc(x.doi)}" target="_blank" rel="noopener">${esc(x.t)}</a><div class="j">${esc(x.j)}, ${x.y}</div></li>`).join("")}</ol><p class="allp"><a href="field.html#all">All ${PUBS.length} papers →</a></p></section>` : ""}
+        ${papers.length && !sel.length ? `<section class="papers"><h2>Recent papers with the group</h2><ol>${papers.map(x => `<li><a href="https://doi.org/${esc(x.doi)}" target="_blank" rel="noopener">${esc(x.t)}</a><div class="j">${esc(x.j)}, ${x.y}</div></li>`).join("")}</ol></section>` : ""}
         ${p.source ? `<p class="source">Introduction adapted from the <a href="${esc(p.source)}" target="_blank" rel="noopener">group website</a>.</p>` : ""}
       </div>
     </article>
@@ -128,7 +131,7 @@ function profile(i) {
     try { await navigator.clipboard.writeText(p.email); $("#copy").textContent = "Copied"; }
     catch { const r = document.createRange(); r.selectNodeContents($("#addr")); getSelection().removeAllRanges(); getSelection().addRange(r); }
   });
-  if (p.slug === "ziyun-wang") window.mountAvatar?.();
+  if (p.slug === "ziyun-wang") { try { window.mountAvatar?.(); } catch (e) { console.warn("3D avatar unavailable; showing the picture", e); } }
   scrollTo({ top: 0 });
 }
 function everyone(at) {
@@ -188,7 +191,7 @@ window.mountAvatar = () => {
   }
   requestAnimationFrame(frame);
 };
-if (document.getElementById("avatar3d")) window.mountAvatar();
+if (document.getElementById("avatar3d")) { try { window.mountAvatar(); } catch (e) { console.warn("3D avatar unavailable; showing the picture", e); } }
 </script>
 </body>
 </html>
