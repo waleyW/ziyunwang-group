@@ -20,7 +20,7 @@ const REACTIONS = [
   { name: "Thermal catalysis", re: /CO oxidation|oxidation of methane|dry reforming|Fischer|water.gas shift|zeolite/i },
   { name: "Water, O₂ & H₂", re: /oxygen.evolution|oxygen.reduction|water oxidation|water splitting|seawater|hydrogen evolution|hydrogen oxidation|(OER|HER|HOR|ORR)|water electroly|hydrogen peroxide|H2O2|H₂O₂|fuel cell/i },
   { name: "CO₂ & CO reduction", re: /CO ?2|CO₂|carbon dioxide|CO-to|CO electro|CO reduction|carbon monoxide|ethylene|acetate|ethanol|propanol|formate|formic|methanation|multi.?carbon|C[–-]C coupling|syngas|carbamate/i },
-  { name: "Organic electrosynthesis", re: /hydrogenation|alcohol|aldehyde|chlorination|furfural|C[–-]H|hydrazine|methanol|glycine/i },
+  { name: "Chemical synthesis", re: /hydrogenation|alcohol|aldehyde|chlorination|furfural|C[–-]H|hydrazine|methanol|glycine/i },
   { name: "Theory & methods", re: /descriptor|volcano|optimization framework|explicit solvent|transition state/i }
 ];
 let TAGS = {};

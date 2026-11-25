@@ -424,13 +424,17 @@ const TOPICS = [
 ];
 // Secondary tag only: the reaction a paper studies.
 const REACTIONS = [
-  { name: "N₂ & urea", re: /nitrogen reduction|nitrate|nitrite|ammonia|urea|C[–-]N coupling|\bN2\b|N₂|amination|amine/i },
-  { name: "CO₂ & CO", re: /CO2|CO₂|\bCO\b|carbon dioxide|carbon monoxide|ethylene|acetate|ethanol|formate|formic|methane|C[–-]C coupling|multicarbon|syngas|carbamate/i },
-  { name: "Water, O₂ & H₂", re: /oxygen evolution|oxygen reduction|water oxidation|water splitting|hydrogen evolution|hydrogen oxidation|\bOER\b|\bHER\b|\bORR\b|electrolys|RuO|IrO|fuel cell|seawater/i },
-  { name: "Batteries", re: /batter|\bZn\b|Zn2|zinc|lithium|\bLi\b|sodium|anode|cathode|dendrite/i },
-  { name: "Selective synthesis", re: /hydrogenation|oxidation|acetylene|alcohol|aldehyde|chlorination|methanol|furfural|propylene|C[–-]H/i }
+  { name: "PFAS & carbon capture", re: /PFAS|perfluoro|polyfluoro|amine.CO2/i },
+  { name: "Batteries", re: /batter|Zn metal anode|Zn.ion|zinc.air|lithium|sodium.ion|solid electrolyte/i },
+  { name: "Nitrogen & urea", re: /nitrogen (electro)?reduction|nitrate|nitrite|ammonia|urea|C[–-]N coupling|N ?2|N₂|NOx|amination/i },
+  { name: "Thermal catalysis", re: /CO oxidation|oxidation of methane|dry reforming|Fischer|water.gas shift|zeolite/i },
+  { name: "Water, O₂ & H₂", re: /oxygen.evolution|oxygen.reduction|water oxidation|water splitting|seawater|hydrogen evolution|hydrogen oxidation|(OER|HER|HOR|ORR)|water electroly|hydrogen peroxide|H2O2|H₂O₂|fuel cell/i },
+  { name: "CO₂ & CO reduction", re: /CO ?2|CO₂|carbon dioxide|CO-to|CO electro|CO reduction|carbon monoxide|ethylene|acetate|ethanol|propanol|formate|formic|methanation|multi.?carbon|C[–-]C coupling|syngas|carbamate/i },
+  { name: "Chemical synthesis", re: /hydrogenation|alcohol|aldehyde|chlorination|furfural|C[–-]H|hydrazine|methanol|glycine/i },
+  { name: "Theory & methods", re: /descriptor|volcano|optimization framework|explicit solvent|transition state/i }
 ];
-const reactionOf = p => (REACTIONS.find(r => r.re.test(p.t + " " + p.k)) || {}).name || "";
+let TAGS = {};  // hand-checked tag per DOI (data/tags.json); the rules above only cover newer papers
+const reactionOf = p => { const d = (p.doi || "").toLowerCase(); return d in TAGS ? TAGS[d] : (REACTIONS.find(r => r.re.test(p.t)) || {}).name || ""; };
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -869,7 +873,8 @@ $("#copyEmail").addEventListener("click", async () => {
 /* ================= boot ================= */
 buildLegend(); movePill(); addEventListener("resize", movePill); miniAnims(); observeRise();
 fetch("data/team.json").then(r => r.json()).then(renderTeam).catch(() => {});
-const catsReady = fetch("data/categories.json").then(r => r.json()).then(d => { OVERRIDE = Object.fromEntries(Object.entries(d.overrides || {}).map(([k, v]) => [k.toLowerCase(), v])); }).catch(() => {});
+const catsReady = fetch("data/categories.json").then(r => r.json()).then(d => { OVERRIDE = Object.fromEntries(Object.entries(d.overrides || {}).map(([k, v]) => [k.toLowerCase(), v])); }).catch(() => {})
+  .then(() => fetch("data/tags.json")).then(r => r.json()).then(d => { TAGS = d.tags || {}; }).catch(() => {});
 catsReady.then(() => fetch("data/publications.json")).then(r => r.json()).then(d => { if (!DATA) { DATA = d; renderAll(); } }).catch(() => {});
 catsReady.then(fetchLive).then(d => { DATA = d; renderAll(); }).catch(() => { if (!DATA) $("#syncText").textContent = "Publication data unavailable. Reload to try again."; });
 </script>
