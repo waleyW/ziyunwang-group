@@ -29,6 +29,7 @@ section.block { padding-block: 56px 20px; }
 .system { position: absolute; inset: 0; }
 .system canvas, .system .poster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .system .poster { object-fit: contain; padding: 4% 14%; transition: opacity .8s; }
+@media (min-width: 900px) and (min-aspect-ratio: 11/10) { .system .poster { padding: 4% 3% 4% calc(max(16px, (100vw - 1140px) / 2) + 456px); } }
 .system canvas { opacity: 0; transition: opacity .8s; touch-action: pan-y; cursor: grab; }
 .system.live canvas { opacity: 1; } .system.live .poster { opacity: 0; }
 .plabel { position: absolute; z-index: 2; transform: translate(-50%, 0); text-decoration: none; text-align: center; white-space: nowrap; background: rgba(251,246,233,.88); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px 4px; transition: opacity .3s, transform .3s var(--bounce); }
@@ -463,8 +464,12 @@ function size() {
   if (cv.width !== Math.round(w * pr) || cv.height !== Math.round(h * pr)) {
     renderer.setSize(w, h, false); camera.aspect = w / h;
     // pull the camera back just far enough for the whole orbit to fit this shape of screen
-    camera.fov = w / h < 1 ? 40 : 30; camera.updateProjectionMatrix();
-    const vh = Math.tan(camera.fov * Math.PI / 360), hh = vh * camera.aspect;
+    camera.fov = w / h < 1 ? 40 : 30;
+    // on wide screens the words and Ziyun's card take the left column, so centre the orbit in the space to their right
+    const intro = document.querySelector(".intro"), room = w >= 900 && w / h > 1.1 && intro ? Math.min(intro.getBoundingClientRect().right - wrap.getBoundingClientRect().left + 16, w * .45) : 0;
+    if (room) camera.setViewOffset(w, h, -room / 2, 0, w, h); else camera.clearViewOffset();
+    camera.updateProjectionMatrix();
+    const vh = Math.tan(camera.fov * Math.PI / 360), hh = vh * (w - room) / h;
     const d = Math.max((ORBIT + 2.4) / hh, 7.4 / vh);
     const dir = size.done ? camera.position.clone().sub(controls.target).normalize() : new THREE.Vector3(0, .36, 1).normalize();
     camera.position.copy(controls.target).addScaledVector(dir, d); size.done = true;
