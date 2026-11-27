@@ -436,7 +436,7 @@ const people = [], fields = [], spinners = [];
 const loadModel = (urls, ok, fail) => new GLTFLoader().load(urls[0], ok, undefined, () => urls.length > 1 ? loadModel(urls.slice(1), ok, fail) : fail && fail());
 const prep = o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; if (o.material.map) { o.material.alphaTest = .5; o.material.transparent = false; } } };
 let loaded = 0;
-loadModel(["assets/planet.glb", "assets/planet.glb.wasm"], g => {
+loadModel(["assets/planet.glb?v=1127", "assets/planet.glb.wasm"], g => {
   home.add(g.scene); g.scene.traverse(o => { prep(o); if (isPerson(o)) people.push(o); });
   g.scene.getObjectByName("atom")?.children.forEach((c, i) => { if (c.children.length) spinners.push({ o: c, s: .6 + i * .25 }); });
   if (++loaded) { wrap.classList.add("live"); kick(); }

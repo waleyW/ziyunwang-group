@@ -176,7 +176,7 @@ window.mountAvatar = () => {
   scene.add(new THREE.HemisphereLight(0xfff3da, 0xc8b08a, 1.6));
   const sun = new THREE.DirectionalLight(0xfff0d6, 2.2); sun.position.set(-3, 5, 4); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); sun.shadow.normalBias = .02; scene.add(sun);
   let mixer = null, fig = null, t = 0; const clock = new THREE.Clock();
-  load(["assets/ziyun-3d.glb", "assets/ziyun-3d.glb.wasm"], g => {
+  load(["assets/ziyun-3d.glb?v=1127", "assets/ziyun-3d.glb.wasm"], g => {
     g.scene.traverse(o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; if (o.material.map) { o.material.alphaTest = .5; o.material.transparent = false; } } });
     scene.add(g.scene); mixer = new THREE.AnimationMixer(g.scene);
     if (!REDUCE) g.animations.forEach(c => mixer.clipAction(c).play());
