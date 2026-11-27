@@ -146,7 +146,7 @@ section.block { padding-block: 56px 20px; }
         <a href="people.html"><i style="background:#2b3550"></i>People</a>
       </nav>
       <section class="pi-card" aria-label="Principal investigator">
-        <a class="pi-fig" href="people.html#ziyun-wang" title="Meet Ziyun Wang"><img src="assets/avatars/ziyun-wang-3d.png" alt="Cartoon of Ziyun Wang"></a>
+        <a class="pi-fig" href="people.html#ziyun-wang" title="Meet Ziyun Wang"><img src="assets/avatars/ziyun-wang-3d.png?v=1127" alt="Cartoon of Ziyun Wang"></a>
         <div class="pi-body">
           <span class="cap">Group leader · Associate Professor</span>
           <a class="pi-name" href="people.html#ziyun-wang">Ziyun Wang <span aria-hidden="true">→</span></a>
@@ -349,7 +349,7 @@ const Galaxy = (() => {
 let PEOPLE = [];
 loadPeople().then(pp => {
   PEOPLE = pp; wireMenus(pp);
-  $("#crew").innerHTML = pp.map(p => `<a href="people.html#${p.slug}"${p.role === "Principal investigator" ? ' class="pi"' : ""}><img loading="lazy" src="assets/avatars/${p.slug}.png" alt=""><b>${esc(p.name)}</b><span>${esc(roleOne(p.role))}</span></a>`).join("");
+  $("#crew").innerHTML = pp.map(p => `<a href="people.html#${p.slug}"${p.role === "Principal investigator" ? ' class="pi"' : ""}><img loading="lazy" src="assets/avatars/${p.slug}.png?v=1127" alt=""><b>${esc(p.name)}</b><span>${esc(roleOne(p.role))}</span></a>`).join("");
   fixHome();
 });
 

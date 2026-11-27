@@ -112,7 +112,7 @@ function profile(i) {
   document.title = `${p.name} · T-Cat’s Journey`;
   $("#view").innerHTML = `
     <article class="page profile">
-      <div>${p.slug === "ziyun-wang" ? `<div class="avatar3d" id="avatar3d"><img class="poster" src="assets/avatars/ziyun-wang-3d.png" alt="A cartoon Ziyun Wang"><canvas aria-label="3D cartoon of Ziyun Wang. Drag to turn it."></canvas></div>` : ""}
+      <div>${p.slug === "ziyun-wang" ? `<div class="avatar3d" id="avatar3d"><img class="poster" src="assets/avatars/ziyun-wang-3d.png?v=1127" alt="A cartoon Ziyun Wang"><canvas aria-label="3D cartoon of Ziyun Wang. Drag to turn it."></canvas></div>` : ""}
       <figure class="polaroid" style="margin:0"><img src="assets/team/${p.slug}.jpg" alt="${esc(p.name)}"><figcaption>${esc(p.name)}</figcaption></figure></div>
       <div>
         <div class="cap">${esc(ROLE[p.role] || p.role)}</div>
