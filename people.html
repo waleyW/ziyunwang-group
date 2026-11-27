@@ -112,7 +112,7 @@ function profile(i) {
   document.title = `${p.name} · T-Cat’s Journey`;
   $("#view").innerHTML = `
     <article class="page profile">
-      <div>${p.slug === "ziyun-wang" ? `<div class="avatar3d" id="avatar3d"><img class="poster" src="assets/avatars/ziyun-wang.png" alt="A cartoon Ziyun Wang waving"><canvas aria-label="Animated 3D cartoon of Ziyun Wang waving. Drag to turn it."></canvas></div>` : ""}
+      <div>${p.slug === "ziyun-wang" ? `<div class="avatar3d" id="avatar3d"><img class="poster" src="assets/avatars/ziyun-wang-3d.png" alt="A cartoon Ziyun Wang"><canvas aria-label="3D cartoon of Ziyun Wang. Drag to turn it."></canvas></div>` : ""}
       <figure class="polaroid" style="margin:0"><img src="assets/team/${p.slug}.jpg" alt="${esc(p.name)}"><figcaption>${esc(p.name)}</figcaption></figure></div>
       <div>
         <div class="cap">${esc(ROLE[p.role] || p.role)}</div>
@@ -157,7 +157,7 @@ Promise.all([
 </script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module">
-/* Ziyun Wang's waving avatar (blender/build_planet.py --scene avatar), played with three.js. */
+/* Ziyun Wang's 3D figure (tripo/ziyun-wang.glb slimmed by blender/slim_pi_model.py), shown with three.js. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -170,23 +170,24 @@ window.mountAvatar = () => {
   const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1)); renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 1, .05, 50); camera.position.set(.3, 2.35, 4.6); scene.add(camera);
-  const controls = new OrbitControls(camera, cv); controls.target.set(0, 1.65, 0); controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = false;
+  const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 1, .05, 50); camera.position.set(.4, 1.55, 5.2); scene.add(camera);
+  const controls = new OrbitControls(camera, cv); controls.target.set(0, 1.08, 0); controls.enableDamping = true; controls.enablePan = false; controls.enableZoom = false;
   controls.minPolarAngle = .9; controls.maxPolarAngle = 1.55; controls.minAzimuthAngle = -1.2; controls.maxAzimuthAngle = 1.2;
   scene.add(new THREE.HemisphereLight(0xfff3da, 0xc8b08a, 1.6));
   const sun = new THREE.DirectionalLight(0xfff0d6, 2.2); sun.position.set(-3, 5, 4); sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); sun.shadow.normalBias = .02; scene.add(sun);
-  let mixer = null; const clock = new THREE.Clock();
-  load(["assets/ziyun-avatar.glb", "assets/ziyun-avatar.glb.wasm"], g => {
+  let mixer = null, fig = null, t = 0; const clock = new THREE.Clock();
+  load(["assets/ziyun-3d.glb", "assets/ziyun-3d.glb.wasm"], g => {
     g.scene.traverse(o => { if (o.isMesh) { o.castShadow = o.receiveShadow = true; if (o.material.map) { o.material.alphaTest = .5; o.material.transparent = false; } } });
     scene.add(g.scene); mixer = new THREE.AnimationMixer(g.scene);
     if (!REDUCE) g.animations.forEach(c => mixer.clipAction(c).play());
+    fig = g.scene;
     wrap.classList.add("live");
   });
   function frame() {
     if (!wrap.isConnected) { renderer.dispose(); return; }
     const w = wrap.clientWidth, h = wrap.clientHeight;
     if (cv.width !== Math.round(w * renderer.getPixelRatio())) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
-    mixer?.update(clock.getDelta()); controls.update(); renderer.render(scene, camera);
+    const dt = clock.getDelta(); mixer?.update(dt); if (fig && !REDUCE) { t += dt; fig.rotation.y = Math.sin(t * .6) * .25; fig.position.y = Math.abs(Math.sin(t * 1.6)) * .03; } controls.update(); renderer.render(scene, camera);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
